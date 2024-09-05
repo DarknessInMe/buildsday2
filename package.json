@@ -1,0 +1,4 @@
+{
+    "name": "Buildsday2",
+    "workspaces": ["packages/core"]
+}
