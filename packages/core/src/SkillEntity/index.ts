@@ -2,7 +2,7 @@ import { SkillIdsEnum } from '../shared/enums';
 
 export interface ISkillEntity {
     name: string;
-    id: string;
+    id: SkillIdsEnum;
     price: [number, number];
     description: [string, string];
 }

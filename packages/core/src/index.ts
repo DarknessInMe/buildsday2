@@ -1,3 +1,5 @@
-import { MastermindTree } from './Tree';
+import { Root } from './Root';
 
-console.log(new MastermindTree());
+const root = new Root();
+
+console.log(JSON.stringify(root.serialize(), null, 2));
