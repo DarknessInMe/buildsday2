@@ -2,10 +2,8 @@
     "compilerOptions": {
       "outDir": "./dist",
       "declaration": true,
-      "rootDir": "./src",
-      "composite": true,
       "target": "es5",
-      "baseUrl": "./src",
+      "baseUrl": "./",
       "lib": ["ESNext", "DOM"],
       "module": "CommonJS",
     },

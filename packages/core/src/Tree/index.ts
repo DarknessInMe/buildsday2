@@ -1,4 +1,4 @@
-import { ISubtree } from 'Subtree';
+import { ISubtree } from '../Subtree';
 
 export interface ITree {
     subtree: Map<string, ISubtree>,
