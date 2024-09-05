@@ -1,5 +1,5 @@
-import { ISkillEntity } from 'SkillEntity';
-import { SkillStatusType } from 'shared/types';
+import { ISkillEntity } from '../SkillEntity';
+import { SkillStatusType } from '../shared/types';
 
 export interface ISkillInsideTree {
     skill: ISkillEntity,
