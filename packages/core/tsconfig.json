@@ -4,6 +4,9 @@
       "declaration": true,
       "rootDir": "./src",
       "composite": true,
+      "target": "es5",
+      "baseUrl": "./src",
+      "lib": ["ESNext", "DOM"],
     },
     "include": ["src/**/*"]
   }

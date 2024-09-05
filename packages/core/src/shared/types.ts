@@ -1,0 +1,1 @@
+export type SkillStatusType = -1 | 0 | 1;
