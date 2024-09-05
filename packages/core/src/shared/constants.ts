@@ -39,3 +39,5 @@ export const SKILL_PRICE_TUPLE: SkillPriceTupleType = {
     THIRD_LEVEL: [3, 6],
     FOURTH_LEVEL: [4, 8],
 } as const;
+
+export const INITIAL_POINTS_COUNT = 180;
