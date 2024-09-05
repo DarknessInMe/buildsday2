@@ -1,3 +1,3 @@
-import { MedicSubtree } from './Subtree/MedicSubtree';
+import { MastermindTree } from './Tree/entities';
 
-console.log(new MedicSubtree());
+console.log(MastermindTree);

@@ -11,7 +11,7 @@ export interface ISubtree {
     buySkill: () => void,
 }
 
-export abstract class BasicSubtree implements ISubtree {
+export class BasicSubtree implements ISubtree {
     public pointsWasted: number = 0;
     public name: string;
     public skills = new Map<SkillIdsEnum, ISkillInsideTree>();
@@ -22,7 +22,7 @@ export abstract class BasicSubtree implements ISubtree {
         this.name = SUBTREE_NAMES_MAP[id];
     }
 
-    protected addSkill(
+    public addSkill(
         skillId: SkillIdsEnum, 
         price: [number, number], 
         description: [string, string], 
@@ -33,5 +33,5 @@ export abstract class BasicSubtree implements ISubtree {
         this.skills.set(skillId, new SkillInsideTree(skillEntity, pointsToAccess))
     }
 
-    buySkill() {}
+    public buySkill() {}
 }
