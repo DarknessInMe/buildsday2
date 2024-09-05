@@ -1,5 +1,10 @@
 import { Root } from './Root';
+import { SkillIdsEnum } from './shared/enums';
 
 const root = new Root();
 
-console.log(JSON.stringify(root.serialize(), null, 2));
+root.onChange((changes) => {
+    console.log('Change!', JSON.stringify(changes, null, 2))
+})
+
+root.buySkill(SkillIdsEnum.INSPIRE);

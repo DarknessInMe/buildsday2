@@ -7,6 +7,7 @@ export interface ISubtree {
     name: string,
     skills: Map<SkillIdsEnum, ISkill>,
     query: (skillId: SkillIdsEnum) => ISkill | null,
+    getWastedPoints: () => number,
     wastePoints: (points: number) => void,
     restorePoints: (points: number) => void,
     serialize: () => ISubtreeSerialized,

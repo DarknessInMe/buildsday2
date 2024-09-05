@@ -1,6 +1,9 @@
-import { SkillIdsEnum, TreeIdsEnum } from '../shared/enums';
+import { SkillIdsEnum, SubtreeIdsEnum, TreeIdsEnum } from '../shared/enums';
 import { ITree, ITreeSerialized, MastermindTree } from '../Tree';
 import { INITIAL_POINTS_COUNT } from '../shared/constants';
+import { ISkill } from '../Skill';
+import { ISubtree } from '../Subtree';
+import { PubSub, Changes, SubscriberType } from './PubSub';
 
 export interface IRootSerialized {
     points: number,
@@ -12,6 +15,7 @@ export class Root {
     public trees: Map<TreeIdsEnum, ITree> = new Map();
     public points: number = INITIAL_POINTS_COUNT;
     public isInfamyBonus: boolean = false;
+    private pubSub = new PubSub();
 
     constructor() {
         const mastermind = new MastermindTree();
@@ -41,6 +45,19 @@ export class Root {
         }
     }
 
+    public onChange(callback: SubscriberType) {
+        return this.pubSub.onChange(callback);
+    }
+
+    public notifySubscribers(skill: ISkill, subtree: ISubtree) {
+        this.pubSub.notifySubscribers(new Changes(
+            this.points,
+            this.isInfamyBonus,
+            skill,
+            subtree,
+        ))
+    }
+
     public query(skillId: SkillIdsEnum) {
         const treeIterator = this.trees[Symbol.iterator]();
 
@@ -68,6 +85,7 @@ export class Root {
 
         subtree.wastePoints(points);
         this.operatePoints(points * -1);
+        this.notifySubscribers(skill, subtree);
     }
 
     public removeSkill(skillId: SkillIdsEnum) {
@@ -83,5 +101,6 @@ export class Root {
 
         subtree.restorePoints(points);
         this.operatePoints(points);
+        this.notifySubscribers(skill, subtree);
     }
 }
