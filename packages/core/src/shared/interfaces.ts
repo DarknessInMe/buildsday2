@@ -1,9 +1,9 @@
 import { ITree } from '../Tree';
-import { ISkillInsideTree } from '../SkillInsideTree';
+import { ISkill } from '../Skill';
 import { ISubtree } from '../Subtree';
 
 export interface ITreeQueryPayload {
-    skill: ISkillInsideTree,
+    skill: ISkill,
     subtree: ISubtree,
     tree: ITree,
 }

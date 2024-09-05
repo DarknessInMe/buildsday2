@@ -1,30 +1,33 @@
 import { SkillIdsEnum } from '../shared/enums';
-import { ISkillEntity } from '../SkillEntity';
 import { SkillStatusType } from '../shared/types';
 
-export interface ISkillInsideTree {
-    data: ISkillEntity,
-    pointsToAccess: [number, number],
-    buySkill: () => number,
-    removeSkill: () => number,
-    getStatus: () => SkillStatusType,
-    serialize: () => ISkillSerialized,
-}
-
-export interface ISkillSerialized {
+interface ISkillStaticData {
     id: SkillIdsEnum,
-    status: SkillStatusType,
     pointsToAccess: [number, number],
     name: string,
     description: [string, string],
     price: [number, number],
 }
 
-export class SkillInsideTree implements ISkillInsideTree {
+export interface ISkill extends ISkillStaticData{
+    buySkill: () => number,
+    removeSkill: () => number,
+    getStatus: () => SkillStatusType,
+    serialize: () => ISkillSerialized,
+}
+
+export interface ISkillSerialized extends ISkillStaticData{
+    status: SkillStatusType,
+}
+
+export class Skill implements ISkill {
     private status: SkillStatusType = -1;
 
     constructor(
-        public data: ISkillEntity,
+        public id: SkillIdsEnum,
+        public name: string,
+        public price: [number, number],
+        public description: [string, string],
         public pointsToAccess: [number, number],
     ) {}
 
@@ -34,12 +37,12 @@ export class SkillInsideTree implements ISkillInsideTree {
 
     public serialize(): ISkillSerialized {
         return {
-            id: this.data.id,
+            id: this.id,
             status: this.getStatus(),
             pointsToAccess: this.pointsToAccess,
-            name: this.data.name,
-            description: this.data.description,
-            price: this.data.price,
+            name: this.name,
+            description: this.description,
+            price: this.price,
         }
     }
 
@@ -54,7 +57,7 @@ export class SkillInsideTree implements ISkillInsideTree {
 
         this.changeStatus(this.status + 1 as SkillStatusType);
 
-        return this.data.price[0];
+        return this.price[0];
     }
 
     public removeSkill() {
@@ -64,6 +67,6 @@ export class SkillInsideTree implements ISkillInsideTree {
 
         this.changeStatus(this.status - 1 as SkillStatusType);
 
-        return this.data.price[0];
+        return this.price[0];
     }
 }

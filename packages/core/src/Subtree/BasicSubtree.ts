@@ -1,13 +1,12 @@
 import { SKILL_NAMES_MAP, SUBTREE_NAMES_MAP } from '../shared/constants';
 import { SkillIdsEnum, SubtreeIdsEnum } from '../shared/enums';
-import { SkillEntity } from '../SkillEntity';
-import { ISkillInsideTree, ISkillSerialized, SkillInsideTree } from '../SkillInsideTree';
+import { ISkill, ISkillSerialized, Skill } from '../Skill';
 
 export interface ISubtree {
     id: SubtreeIdsEnum,
     name: string,
-    skills: Map<SkillIdsEnum, ISkillInsideTree>,
-    query: (skillId: SkillIdsEnum) => ISkillInsideTree | null,
+    skills: Map<SkillIdsEnum, ISkill>,
+    query: (skillId: SkillIdsEnum) => ISkill | null,
     wastePoints: (points: number) => void,
     restorePoints: (points: number) => void,
     serialize: () => ISubtreeSerialized,
@@ -23,7 +22,7 @@ export interface ISubtreeSerialized {
 export abstract class BasicSubtree implements ISubtree {
     protected pointsWasted: number = 0;
     public name: string;
-    public skills = new Map<SkillIdsEnum, ISkillInsideTree>();
+    public skills = new Map<SkillIdsEnum, ISkill>();
 
     constructor(
         public readonly id: SubtreeIdsEnum
@@ -68,8 +67,14 @@ export abstract class BasicSubtree implements ISubtree {
         description: [string, string], 
         pointsToAccess: [number, number]
     ) {
-        const skillEntity = new SkillEntity(SKILL_NAMES_MAP[skillId], skillId, price, description);
+        const skill = new Skill(
+            skillId,
+            SKILL_NAMES_MAP[skillId],
+            price, 
+            description,
+            pointsToAccess,
+        );
 
-        this.skills.set(skillId, new SkillInsideTree(skillEntity, pointsToAccess))
+        this.skills.set(skillId, skill)
     }
 }
