@@ -1,2 +1,2 @@
 export * from './BasicSubtree';
-export * from './entities';
+export * from './MedicSubtree';

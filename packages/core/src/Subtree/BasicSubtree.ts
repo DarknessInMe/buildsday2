@@ -11,7 +11,7 @@ export interface ISubtree {
     buySkill: () => void,
 }
 
-export class BasicSubtree implements ISubtree {
+export abstract class BasicSubtree implements ISubtree {
     public pointsWasted: number = 0;
     public name: string;
     public skills = new Map<SkillIdsEnum, ISkillInsideTree>();

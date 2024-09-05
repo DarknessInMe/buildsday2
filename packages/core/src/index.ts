@@ -1,3 +1,3 @@
-import { MastermindTree } from './Tree/entities';
+import { MastermindTree } from './Tree';
 
-console.log(MastermindTree);
+console.log(new MastermindTree());

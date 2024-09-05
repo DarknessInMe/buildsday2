@@ -8,7 +8,7 @@ export interface ITree {
     name: string;
 }
 
-export class BasicTree implements ITree {
+export abstract class BasicTree implements ITree {
     public subtree = new Map<SubtreeIdsEnum, ISubtree>;
     public name: string;
 
