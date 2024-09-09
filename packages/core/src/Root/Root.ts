@@ -1,5 +1,5 @@
 import { SkillIdsEnum, SubtreeIdsEnum, TreeIdsEnum } from '../shared/enums';
-import { ITree, ITreeSerialized, MastermindTree } from '../Tree';
+import { ITree, ITreeSerialized, MastermindTree, EnforcerTree } from '../Tree';
 import { INITIAL_POINTS_COUNT } from '../shared/constants';
 import { ISkill } from '../Skill';
 import { ISubtree } from '../Subtree';
@@ -19,8 +19,10 @@ export class Root {
 
     constructor() {
         const mastermind = new MastermindTree();
+        const enforcer = new EnforcerTree();
 
         this.trees.set(mastermind.id, mastermind);
+        this.trees.set(enforcer.id, enforcer);
     }
 
     public operatePoints(acc: number) {
