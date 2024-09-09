@@ -80,12 +80,12 @@ export class Root {
         }
 
         const { skill, subtree } = result;
+        const points = skill.buySkill(this.isInfamyBonus);
 
-        const points = skill.buySkill();
-
-        subtree.wastePoints(points);
-        this.operatePoints(points * -1);
-        this.notifySubscribers(skill, subtree);
+        if (typeof points === 'number') {
+            this.operatePoints(points * -1);
+            this.notifySubscribers(skill, subtree);
+        }
     }
 
     public removeSkill(skillId: SkillIdsEnum) {
@@ -96,11 +96,11 @@ export class Root {
         }
 
         const { skill, subtree } = result;
-
         const points = skill.removeSkill();
 
-        subtree.restorePoints(points);
-        this.operatePoints(points);
-        this.notifySubscribers(skill, subtree);
+        if (typeof points === 'number') {
+            this.operatePoints(points);
+            this.notifySubscribers(skill, subtree);
+        }
     }
 }

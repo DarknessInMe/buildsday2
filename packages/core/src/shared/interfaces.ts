@@ -26,3 +26,9 @@ export interface IChanges {
     skill: ISkillChanges,
     subtree: ISubtreeChanges,
 }
+
+export interface ISkillParent {
+    validateSkillPoints: (pointsToAccess: number) => boolean;
+    onBuySkill: (points: number) => void;
+    onRemoveSkill: (points: number) => void;
+}

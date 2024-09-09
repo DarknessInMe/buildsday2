@@ -1,8 +1,9 @@
 import { SKILL_NAMES_MAP, SUBTREE_NAMES_MAP } from '../shared/constants';
 import { SkillIdsEnum, SubtreeIdsEnum } from '../shared/enums';
 import { ISkill, ISkillSerialized, Skill } from '../Skill';
+import { ISkillParent } from '../shared/interfaces';
 
-export interface ISubtree {
+export interface ISubtree extends ISkillParent {
     id: SubtreeIdsEnum,
     name: string,
     skills: Map<SkillIdsEnum, ISkill>,
@@ -46,6 +47,18 @@ export abstract class BasicSubtree implements ISubtree {
         };
     }
 
+    public validateSkillPoints(pointsToAccess: number) {
+        return pointsToAccess > this.getWastedPoints();
+    };
+
+    public onBuySkill(points: number) {
+        this.wastePoints(points);
+    };
+
+    public onRemoveSkill(points: number) {
+        this.restorePoints(points);
+    }
+
     public getWastedPoints() {
         return this.pointsWasted;
     }
@@ -74,6 +87,7 @@ export abstract class BasicSubtree implements ISubtree {
             price, 
             description,
             pointsToAccess,
+            this,
         );
 
         this.skills.set(skillId, skill)

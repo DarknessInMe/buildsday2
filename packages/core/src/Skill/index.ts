@@ -1,23 +1,25 @@
+import { ISkillParent } from 'src/shared/interfaces';
 import { SkillIdsEnum } from '../shared/enums';
 import { SkillStatusType } from '../shared/types';
 
 interface ISkillStaticData {
     id: SkillIdsEnum,
-    pointsToAccess: [number, number],
     name: string,
     description: [string, string],
     price: [number, number],
 }
 
 export interface ISkill extends ISkillStaticData{
-    buySkill: () => number,
-    removeSkill: () => number,
+    buySkill: (isInfamyBonus: boolean) => number | null,
+    removeSkill: () => number | null,
+    getPointsToAccess: (isInfamyBonus: boolean) => number,
     getStatus: () => SkillStatusType,
     serialize: () => ISkillSerialized,
 }
 
 export interface ISkillSerialized extends ISkillStaticData{
     status: SkillStatusType,
+    pointsToAccess: [number, number],
 }
 
 export class Skill implements ISkill {
@@ -28,7 +30,8 @@ export class Skill implements ISkill {
         public name: string,
         public price: [number, number],
         public description: [string, string],
-        public pointsToAccess: [number, number],
+        private pointsToAccess: [number, number],
+        public parent: ISkillParent,
     ) {}
 
     private changeStatus(status: SkillStatusType) {
@@ -50,23 +53,41 @@ export class Skill implements ISkill {
         return this.status;
     }
 
-    public buySkill() {
+    public getPointsToAccess(isInfamyBonus: boolean) {
+        return this.pointsToAccess[isInfamyBonus ? 0 : 1]
+    }
+
+    public buySkill(isInfamyBonus: boolean) {
         if (this.status === 1) {
-            throw new Error('Unexpected error happened. Cannot buy already aced skill')
+            console.error('Unexpected error happened. Cannot buy already aced skill')
+            return null;
         }
 
-        this.changeStatus(this.status + 1 as SkillStatusType);
+        if (!this.parent.validateSkillPoints(this.getPointsToAccess(isInfamyBonus))) {
+            return null;
+        }
 
-        return this.price[0];
+        const newStatus = this.status + 1;
+        const skillPrice = this.price[newStatus];
+
+        this.changeStatus(newStatus as SkillStatusType);
+        this.parent.onBuySkill(skillPrice);
+
+        return skillPrice;
     }
 
     public removeSkill() {
         if (this.status === -1) {
-            throw new Error('Unexpected error happened. Cannot remove unbought skill')
+            console.error('Unexpected error happened. Cannot remove unbought skill')
+            return null;
         }
 
-        this.changeStatus(this.status - 1 as SkillStatusType);
+        const prevStatus = this.status;
+        const skillPrice = this.price[prevStatus];
 
-        return this.price[0];
+        this.changeStatus(prevStatus - 1 as SkillStatusType);
+        this.parent.onRemoveSkill(skillPrice);
+
+        return skillPrice;
     }
 }
