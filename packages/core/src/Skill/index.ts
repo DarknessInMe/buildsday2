@@ -1,9 +1,12 @@
 import { ISkillParent } from 'src/shared/interfaces';
-import { SkillIdsEnum } from '../shared/enums';
 import { SkillStatusType } from '../shared/types';
-
+/**
+ * TODO: 
+ * 1. Add JSDoc
+ * 2. Improve typing
+ */
 interface ISkillStaticData {
-    id: SkillIdsEnum,
+    id: string,
     name: string,
     description: [string, string],
     price: [number, number],
@@ -26,7 +29,7 @@ export class Skill implements ISkill {
     private status: SkillStatusType = -1;
 
     constructor(
-        public id: SkillIdsEnum,
+        public id: string,
         public name: string,
         public price: [number, number],
         public description: [string, string],

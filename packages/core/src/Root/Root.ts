@@ -1,5 +1,4 @@
-import { SkillIdsEnum, SubtreeIdsEnum, TreeIdsEnum } from '../shared/enums';
-import { ITree, ITreeSerialized, MastermindTree, EnforcerTree } from '../Tree';
+import { ITree, ITreeSerialized } from '../Tree';
 import { INITIAL_POINTS_COUNT } from '../shared/constants';
 import { ISkill } from '../Skill';
 import { ISubtree } from '../Subtree';
@@ -8,25 +7,25 @@ import { PubSub, Changes, SubscriberType } from './PubSub';
 export interface IRootSerialized {
     points: number,
     isInfamyBonus: boolean,
-    trees: Record<TreeIdsEnum, ITreeSerialized>,
+    trees: Record<string, ITreeSerialized>,
 }
 
 export class Root {
-    public trees: Map<TreeIdsEnum, ITree> = new Map();
+    public trees: Map<string, ITree> = new Map();
     public points: number = INITIAL_POINTS_COUNT;
     public isInfamyBonus: boolean = false;
     private pubSub = new PubSub();
 
-    constructor() {
-        const mastermind = new MastermindTree();
-        const enforcer = new EnforcerTree();
+    constructor() {}
 
-        this.trees.set(mastermind.id, mastermind);
-        this.trees.set(enforcer.id, enforcer);
+    private operatePoints(acc: number) {
+        this.points += acc;
     }
 
-    public operatePoints(acc: number) {
-        this.points += acc;
+    public setTree(treeId: string, tree: ITree) {
+        this.trees.set(treeId, tree);
+
+        return this;
     }
 
     public toggleInfamyBonus(infamyState: boolean) {
@@ -43,7 +42,7 @@ export class Root {
         return {
             points: this.points,
             isInfamyBonus: this.isInfamyBonus,
-            trees: trees as Record<TreeIdsEnum, ITreeSerialized>,
+            trees: trees as Record<string, ITreeSerialized>,
         }
     }
 
@@ -60,7 +59,7 @@ export class Root {
         ))
     }
 
-    public query(skillId: SkillIdsEnum) {
+    public query(skillId: string) {
         const treeIterator = this.trees[Symbol.iterator]();
 
         for (const [, treeEntity] of treeIterator) {
@@ -74,7 +73,7 @@ export class Root {
         return null;
     }
 
-    public buySkill(skillId: SkillIdsEnum) {
+    public buySkill(skillId: string) {
         const result = this.query(skillId);
 
         if (!result) {
@@ -90,7 +89,7 @@ export class Root {
         }
     }
 
-    public removeSkill(skillId: SkillIdsEnum) {
+    public removeSkill(skillId: string) {
         const result = this.query(skillId);
 
         if (!result) {

@@ -1,13 +1,11 @@
-import { SKILL_NAMES_MAP, SUBTREE_NAMES_MAP } from '../shared/constants';
-import { SkillIdsEnum, SubtreeIdsEnum } from '../shared/enums';
 import { ISkill, ISkillSerialized, Skill } from '../Skill';
 import { ISkillParent } from '../shared/interfaces';
 
 export interface ISubtree extends ISkillParent {
-    id: SubtreeIdsEnum,
+    id: string,
     name: string,
-    skills: Map<SkillIdsEnum, ISkill>,
-    query: (skillId: SkillIdsEnum) => ISkill | null,
+    skills: Map<string, ISkill>,
+    query: (skillId: string) => ISkill | null,
     getWastedPoints: () => number,
     wastePoints: (points: number) => void,
     restorePoints: (points: number) => void,
@@ -16,21 +14,19 @@ export interface ISubtree extends ISkillParent {
 
 export interface ISubtreeSerialized {
     name: string,
-    id: SubtreeIdsEnum,
-    skills: Record<SkillIdsEnum, ISkillSerialized>,
+    id: string,
+    skills: Record<string, ISkillSerialized>,
     pointsWasted: number,
 }
 
 export abstract class BasicSubtree implements ISubtree {
     protected pointsWasted: number = 0;
-    public name: string;
-    public skills = new Map<SkillIdsEnum, ISkill>();
+    public skills = new Map<string, ISkill>();
 
     constructor(
-        public readonly id: SubtreeIdsEnum
-    ) {
-        this.name = SUBTREE_NAMES_MAP[id];
-    }
+        public readonly id: string,
+        public readonly name: string
+    ) {}
 
     public serialize(): ISubtreeSerialized {
         const skills = {};
@@ -43,7 +39,7 @@ export abstract class BasicSubtree implements ISubtree {
             id: this.id,
             name: this.name,
             pointsWasted: this.getWastedPoints(),
-            skills: skills as Record<SkillIdsEnum, ISkillSerialized>,
+            skills: skills as Record<string, ISkillSerialized>,
         };
     }
 
@@ -71,19 +67,20 @@ export abstract class BasicSubtree implements ISubtree {
         this.pointsWasted -= points;
     }
 
-    public query(skillId: SkillIdsEnum) {
+    public query(skillId: string) {
         return this.skills.get(skillId) ?? null;
     }
 
     protected addSkill(
-        skillId: SkillIdsEnum, 
+        skillId: string,
+        name: string,
         price: [number, number], 
         description: [string, string], 
         pointsToAccess: [number, number]
     ) {
         const skill = new Skill(
             skillId,
-            SKILL_NAMES_MAP[skillId],
+            name,
             price, 
             description,
             pointsToAccess,

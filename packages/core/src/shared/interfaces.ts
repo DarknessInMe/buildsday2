@@ -1,7 +1,6 @@
 import { ITree } from '../Tree';
 import { ISkill } from '../Skill';
 import { ISubtree } from '../Subtree';
-import { SkillIdsEnum, SubtreeIdsEnum } from './enums';
 import { SkillStatusType } from './types';
 
 export interface ITreeQueryPayload {
@@ -11,12 +10,12 @@ export interface ITreeQueryPayload {
 }
 
 export interface ISkillChanges {
-    id: SkillIdsEnum,
+    id: string,
     status: SkillStatusType,
 }
 
 export interface ISubtreeChanges {
-    id: SubtreeIdsEnum,
+    id: string,
     wastedPoints: number,
 }
 
