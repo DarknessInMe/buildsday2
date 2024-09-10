@@ -10,6 +10,13 @@ export interface ISubtree extends ISkillParent {
     wastePoints: (points: number) => void,
     restorePoints: (points: number) => void,
     serialize: () => ISubtreeSerialized,
+    addSkill: (
+        skillId: string,
+        name: string,
+        price: [number, number], 
+        description: [string, string], 
+        pointsToAccess: [number, number]
+    ) => ISkill,
 }
 
 export interface ISubtreeSerialized {
@@ -19,7 +26,7 @@ export interface ISubtreeSerialized {
     pointsWasted: number,
 }
 
-export abstract class BasicSubtree implements ISubtree {
+export class BasicSubtree implements ISubtree {
     protected pointsWasted: number = 0;
     public skills = new Map<string, ISkill>();
 
@@ -44,7 +51,7 @@ export abstract class BasicSubtree implements ISubtree {
     }
 
     public validateSkillPoints(pointsToAccess: number) {
-        return pointsToAccess > this.getWastedPoints();
+        return pointsToAccess <= this.getWastedPoints();
     };
 
     public onBuySkill(points: number) {
@@ -71,7 +78,7 @@ export abstract class BasicSubtree implements ISubtree {
         return this.skills.get(skillId) ?? null;
     }
 
-    protected addSkill(
+    public addSkill(
         skillId: string,
         name: string,
         price: [number, number], 
@@ -87,6 +94,8 @@ export abstract class BasicSubtree implements ISubtree {
             this,
         );
 
-        this.skills.set(skillId, skill)
+        this.skills.set(skillId, skill);
+
+        return skill;
     }
 }

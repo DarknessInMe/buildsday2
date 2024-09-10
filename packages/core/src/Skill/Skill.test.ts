@@ -1,6 +1,7 @@
 import { ISkillParent } from '../shared/interfaces';
 import { ISkill, Skill } from './index';
 import { expect, test, describe, vi, beforeEach } from 'vitest'
+import { MOCKED_SKILL } from '../__tests__/mocks';
 
 const MOCKED_PARENT: ISkillParent = {
     validateSkillPoints: vi.fn(() => true),
@@ -13,11 +14,11 @@ describe('Testing Skill purchase methods', () => {
 
     beforeEach(() => {
         skill = new Skill(
-            'SKILL_ID',
-            'Testing Skill',
-            [1, 2],
-            ['Basic version', 'Aced version'],
-            [0, 0],
+            MOCKED_SKILL.id,
+            MOCKED_SKILL.name,
+            MOCKED_SKILL.price,
+            MOCKED_SKILL.description,
+            MOCKED_SKILL.pointsToAccess,
             MOCKED_PARENT,
         )
     });
