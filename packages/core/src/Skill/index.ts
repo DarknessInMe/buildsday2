@@ -1,4 +1,4 @@
-import { ISkillParent } from 'src/shared/interfaces';
+import { ISkillParent } from '../shared/interfaces';
 import { SkillStatusType } from '../shared/types';
 /**
  * TODO: 
