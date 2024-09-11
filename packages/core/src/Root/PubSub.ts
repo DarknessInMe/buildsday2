@@ -1,17 +1,21 @@
-import { ISkill } from 'src/Skill';
-import { IChanges, ISkillChanges, ISubtreeChanges } from '../shared/interfaces';
-import { ISubtree } from 'src/Subtree';
+import { 
+    IChanges, 
+    ISkillChanges,
+    ISubtreeChanges,
+    IChangeableSKill,
+    IChangeableSubtree 
+} from '../shared/interfaces';
 
 export type SubscriberType = (changes: IChanges) => any;
 
 export class PubSub {
     private subscribers: SubscriberType[] = [];
 
-    public onChange(callback: SubscriberType) {
+    public onChange(callback: SubscriberType): () => void {
         this.subscribers.push(callback);
 
         return () => {
-            this.subscribers.filter((subscriber) => subscriber !== callback);
+            this.subscribers = this.subscribers.filter((subscriber) => subscriber !== callback);
         }
     }
 
@@ -29,8 +33,8 @@ export class Changes implements IChanges {
     constructor(
         public points: number,
         public isInfamyBonus: boolean,
-        skill: ISkill,
-        subtree: ISubtree,
+        skill: IChangeableSKill,
+        subtree: IChangeableSubtree,
     ) {
         this.skill = {
             id: skill.id,

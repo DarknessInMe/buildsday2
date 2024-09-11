@@ -26,6 +26,16 @@ export interface IChanges {
     subtree: ISubtreeChanges,
 }
 
+export interface IChangeableSKill {
+    id: string,
+    getStatus: () => SkillStatusType,
+}
+
+export interface IChangeableSubtree {
+    id: string,
+    getWastedPoints: () => number,
+}
+
 export interface ISkillParent {
     validateSkillPoints: (pointsToAccess: number) => boolean;
     onBuySkill: (points: number) => void;

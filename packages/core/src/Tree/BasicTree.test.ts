@@ -1,5 +1,5 @@
-import { expect, test, describe, beforeEach } from 'vitest'
-import { BasicSubtree, ISubtree } from '../Subtree'
+import { expect, test, describe, beforeEach } from 'vitest';
+import { BasicSubtree, ISubtree } from '../Subtree';
 import { MOCKED_SUBTREE, MOCKED_TREE, MOCKED_SKILL, addSkill, IMockedSkill } from '../__tests__';
 import { BasicTree, ITree, ITreeSerialized } from './BasicTree';
 import { ISkill } from '../Skill';
