@@ -6,6 +6,7 @@ export interface ITree {
     id: string,
     name: string;
     query: (skillId: string) => ITreeQueryPayload | null,
+    addSubtree: (subtreeId: string, subtree: ISubtree) => ISubtree,
     serialize: () => ITreeSerialized,
 }
 
@@ -15,7 +16,7 @@ export interface ITreeSerialized {
     subtrees: Record<string, ISubtreeSerialized>
 }
 
-export abstract class BasicTree implements ITree {
+export class BasicTree implements ITree {
     public subtrees = new Map<string, ISubtree>;
 
     constructor(
@@ -39,6 +40,8 @@ export abstract class BasicTree implements ITree {
 
     public addSubtree(subtreeId: string, subtreeEntity: ISubtree) {
         this.subtrees.set(subtreeId, subtreeEntity);
+
+        return subtreeEntity;
     }
 
     public query(skillId: string): ITreeQueryPayload | null {

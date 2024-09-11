@@ -1,23 +1,24 @@
 import { expect, test, describe, beforeEach } from 'vitest'
 import { BasicSubtree, ISubtree, ISubtreeSerialized } from './BasicSubtree';
-import { MOCKED_SKILL, MOCKED_SKILL_2, IMockedSkill } from '../__tests__/mocks';
+import { 
+    MOCKED_SKILL, 
+    MOCKED_SUBTREE, 
+    IMockedSkill, 
+    addSkill 
+} from '../__tests__';
+
+const MOCKED_SKILL_2: IMockedSkill = {
+    ...MOCKED_SKILL,
+    id: 'SKILL_ID_2',
+    name: 'Testing Skill 2',
+};
 
 let subtree: ISubtree;
 
-const addSkill = (subtree: ISubtree, mock: IMockedSkill) => {
-    return subtree.addSkill(
-        mock.id,
-        mock.name,
-        mock.price,
-        mock.description,
-        mock.pointsToAccess,
-    );
-}
-
 beforeEach(() => {
     subtree = new BasicSubtree(
-        'TESTING_SUBTREE',
-        'Testing Subtree',
+        MOCKED_SUBTREE.id,
+        MOCKED_SUBTREE.name,
     )
 })
 
@@ -130,8 +131,8 @@ describe('Testing serializing', () => {
         addSkill(subtree, MOCKED_SKILL_2);
 
         expect(subtree.serialize()).toMatchObject<ISubtreeSerialized>({
-            id: 'TESTING_SUBTREE',
-            name: 'Testing Subtree',
+            id: MOCKED_SUBTREE.id,
+            name: MOCKED_SUBTREE.name,
             pointsWasted: 0,
             skills: {
                 [MOCKED_SKILL.id]: {

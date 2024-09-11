@@ -1,10 +1,4 @@
-export interface IMockedSkill {
-    id: string,
-    name: string,
-    price: [number, number],
-    description: [string, string],
-    pointsToAccess: [number, number],
-}
+import { IMockedSkill, IMockedSubtree, IMockedTree } from './interfaces';
 
 export const MOCKED_SKILL: IMockedSkill = {
     id: 'SKILL_ID',
@@ -14,8 +8,12 @@ export const MOCKED_SKILL: IMockedSkill = {
     pointsToAccess: [0, 0],
 };
 
-export const MOCKED_SKILL_2: IMockedSkill = {
-    ...MOCKED_SKILL,
-    id: 'SKILL_ID_2',
-    name: 'Testing Skill 2',
-};
+export const MOCKED_SUBTREE: IMockedSubtree = {
+    id: 'SUBTREE_ID',
+    name: 'Testing Subtree',
+}
+
+export const MOCKED_TREE: IMockedTree = {
+    id: 'TREE_ID',
+    name: 'Testing Tree',
+}
