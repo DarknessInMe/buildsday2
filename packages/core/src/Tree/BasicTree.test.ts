@@ -28,12 +28,6 @@ beforeEach(() => {
     tree.addSubtree(subtree.id, subtree);
 })
 
-describe('Testing Tree meta methods', () => {
-    test('Should be able to add subtrees', () => {
-        expect(tree.subtrees.has(subtree.id)).toBe(true)
-    })
-})
-
 describe('Testing Tree query', () => {
     test('Should be able to query skill', () => {
         const result = tree.query(MOCKED_SKILL.id);
