@@ -17,8 +17,8 @@ export class Root {
         this.points += acc;
     }
 
-    public setTree(treeId: string, tree: ITree) {
-        this.trees.set(treeId, tree);
+    public setTree(tree: ITree) {
+        this.trees.set(tree.id, tree);
 
         return this;
     }

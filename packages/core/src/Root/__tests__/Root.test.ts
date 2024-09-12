@@ -32,8 +32,8 @@ beforeEach(() => {
     tree2.addSubtree(subtree2);
 
     root = new Root()
-        .setTree(tree1.id, tree1)
-        .setTree(tree2.id, tree2);
+        .setTree(tree1)
+        .setTree(tree2);
 });
 
 describe('Testing meta methods', () => {
