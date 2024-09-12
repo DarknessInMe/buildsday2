@@ -1,5 +1,5 @@
-import { SkillStatusType } from '../shared/types';
 import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
+import { SkillStatusEnum } from './enums';
 
 interface ISkillStaticData {
     id: string,
@@ -12,12 +12,13 @@ export interface ISkill extends ISkillStaticData{
     buySkill: (isInfamyBonus: boolean) => number | null,
     removeSkill: () => number | null,
     getPointsToAccess: (isInfamyBonus: boolean) => number,
-    getStatus: () => SkillStatusType,
+    getStatus: () => SkillStatusEnum,
     serialize: () => ISkillSerialized,
+    getPriceByStatus: (status: SkillStatusEnum) => number, 
 }
 
 export interface ISkillSerialized extends ISkillStaticData{
-    status: SkillStatusType,
+    status: SkillStatusEnum,
     pointsToAccess: SkillPointsToAccessType,
 }
 

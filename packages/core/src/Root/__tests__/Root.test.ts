@@ -1,5 +1,5 @@
-import { expect, test, beforeEach, vi, describe } from 'vitest';
-import { IRootSerialized, Root } from '../Root';
+import { expect, test, beforeEach, describe } from 'vitest';
+import { IRootSerialized, Root } from '../index';
 import { BasicTree } from '../../Tree';
 import { 
     MOCKED_TREE, 
@@ -8,6 +8,7 @@ import {
     addSkill,
 } from '../../__tests__';
 import { BasicSubtree } from '../../Subtree';
+import { SkillStatusEnum } from '../../Skill';
 import { 
     MOCKED_ROOT_SERIALIZED,
     MOCKED_TREE_2,
@@ -55,14 +56,14 @@ describe('Testing skill purchasing', () => {
         root.buySkill(MOCKED_SKILL.id);
 
         const result = root.query(MOCKED_SKILL.id);
-        expect(result?.skill?.getStatus?.()).toBe(0);
+        expect(result?.skill?.getStatus?.()).toBe(SkillStatusEnum.BASIC);
     });
     test('Should be able to remove skill', () => {
         root.buySkill(MOCKED_SKILL.id);
         root.removeSkill(MOCKED_SKILL.id);
 
         const result = root.query(MOCKED_SKILL.id);
-        expect(result?.skill?.getStatus?.()).toBe(-1);
+        expect(result?.skill?.getStatus?.()).toBe(SkillStatusEnum.NULL);
     });
     test('Root points should be decreased on skill purchase', () => {
         const initialPoints = root.points;
@@ -71,7 +72,7 @@ describe('Testing skill purchasing', () => {
 
         const result = root.query(MOCKED_SKILL.id);
         const skill = result!.skill;
-        const price = skill.price[skill.getStatus() as number];
+        const price = skill.getPriceByStatus(skill.getStatus());
 
         expect(root.points).toBe(initialPoints - price);
     });

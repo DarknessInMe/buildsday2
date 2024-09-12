@@ -7,6 +7,7 @@ import {
     IMockedSkill, 
     addSkill 
 } from '../__tests__';
+import { SkillStatusEnum } from '../Skill';
 
 const MOCKED_SKILL_2: IMockedSkill = {
     ...MOCKED_SKILL,
@@ -47,7 +48,7 @@ describe('Testing skills purchasing', () => {
 
         const pointsWastedForSkill = skill.buySkill(false);
 
-        expect(skill.getStatus()).toBe(0);
+        expect(skill.getStatus()).toBe(SkillStatusEnum.BASIC);
         expect(subtree.getWastedPoints()).toBe(pointsWastedForSkill);
     });
     test('Should be able to remove skills', () => {
@@ -56,7 +57,7 @@ describe('Testing skills purchasing', () => {
         skill.buySkill(false);
         skill.removeSkill();
 
-        expect(skill.getStatus()).toBe(-1);
+        expect(skill.getStatus()).toBe(SkillStatusEnum.NULL);
         expect(subtree.getWastedPoints()).toBe(0);
     });
     test('Should not be able to buy skill without required points to access', () => {
@@ -69,7 +70,7 @@ describe('Testing skills purchasing', () => {
 
         skill.buySkill(false);
 
-        expect(skill.getStatus()).toBe(-1);
+        expect(skill.getStatus()).toBe(SkillStatusEnum.NULL);
         expect(subtree.getWastedPoints()).toBe(0);
     });
     test('Should be able to buy skill by acing already bought skill', () => {
@@ -91,8 +92,8 @@ describe('Testing skills purchasing', () => {
         cheapSkill.buySkill(false); // acing same skill
         expensiveSkill.buySkill(false);
 
-        expect(cheapSkill.getStatus()).toBe(1);
-        expect(expensiveSkill.getStatus()).toBe(0);
+        expect(cheapSkill.getStatus()).toBe(SkillStatusEnum.ACED);
+        expect(expensiveSkill.getStatus()).toBe(SkillStatusEnum.BASIC);
         expect(subtree.getWastedPoints()).toBe(4);
     });
     test('Should be able to handle infamy bonus for skill purchases', () => {
@@ -117,12 +118,12 @@ describe('Testing skills purchasing', () => {
 
         // Expensive skill requires 3 points without infamy bonus. Currently, 
         // only 2 skill points were gained by subtree. Expensive must not be bought
-        expect(expensiveSkill.getStatus()).toBe(-1);
+        expect(expensiveSkill.getStatus()).toBe(SkillStatusEnum.NULL);
 
         expensiveSkill.buySkill(true);
 
         // Now, expensive skill has been bought with infamy bonus, which requires 2 points to access.
-        expect(expensiveSkill.getStatus()).toBe(0);
+        expect(expensiveSkill.getStatus()).toBe(SkillStatusEnum.BASIC);
     });
 })
 
@@ -138,7 +139,7 @@ describe('Testing serializing', () => {
             skills: {
                 [MOCKED_SKILL.id]: {
                     id: MOCKED_SKILL.id,
-                    status: -1,
+                    status: SkillStatusEnum.NULL,
                     pointsToAccess: MOCKED_SKILL.pointsToAccess,
                     name: MOCKED_SKILL.name,
                     description: MOCKED_SKILL.description,
@@ -146,7 +147,7 @@ describe('Testing serializing', () => {
                 },
                 [MOCKED_SKILL_2.id]: {
                     id: MOCKED_SKILL_2.id,
-                    status: -1,
+                    status: SkillStatusEnum.NULL,
                     pointsToAccess: MOCKED_SKILL_2.pointsToAccess,
                     name: MOCKED_SKILL_2.name,
                     description: MOCKED_SKILL_2.description,

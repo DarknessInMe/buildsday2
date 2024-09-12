@@ -1,13 +1,19 @@
-import { SkillStatusType } from '../shared/types';
 import { ISkill, ISkillSerialized, ISkillParent } from './interfaces';
 import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
+import { SkillStatusEnum } from './enums';
+
+const STATUS_WEIGHT_MAP = {
+    [SkillStatusEnum.NULL]: -1,
+    [SkillStatusEnum.BASIC]: 0,
+    [SkillStatusEnum.ACED]: 1,
+};
 
 /**
  * TODO: 
  * 1. Add JSDoc
  */
 export class Skill implements ISkill {
-    private status: SkillStatusType = -1;
+    private status: SkillStatusEnum = SkillStatusEnum.NULL;
 
     constructor(
         public id: string,
@@ -18,7 +24,7 @@ export class Skill implements ISkill {
         public parent: ISkillParent,
     ) {}
 
-    private changeStatus(status: SkillStatusType) {
+    private changeStatus(status: SkillStatusEnum) {
         this.status = status
     }
 
@@ -41,8 +47,26 @@ export class Skill implements ISkill {
         return this.pointsToAccess[isInfamyBonus ? 0 : 1]
     }
 
+    public getPriceByStatus(status: SkillStatusEnum) {
+        if (status === SkillStatusEnum.NULL) {
+            return 0;
+        };
+
+        return this.price[SkillStatusEnum.BASIC === status ? 0 : 1];
+    }
+
+    private getStatusByWeight(weight: number): SkillStatusEnum {
+        for (const statusKey in STATUS_WEIGHT_MAP) {
+            if (STATUS_WEIGHT_MAP[statusKey] === weight) {
+                return statusKey as SkillStatusEnum;
+            }
+        }
+        console.error(`Could not get Skill status by weight for ${this.id}`);
+        return SkillStatusEnum.NULL;
+    }
+
     public buySkill(isInfamyBonus: boolean) {
-        if (this.status === 1) {
+        if (this.status === SkillStatusEnum.ACED) {
             console.error('Unexpected error happened. Cannot buy already aced skill')
             return null;
         }
@@ -51,25 +75,25 @@ export class Skill implements ISkill {
             return null;
         }
 
-        const newStatus = this.status + 1;
-        const skillPrice = this.price[newStatus];
+        const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] + 1);
+        const skillPrice = this.getPriceByStatus(newStatus)
 
-        this.changeStatus(newStatus as SkillStatusType);
+        this.changeStatus(newStatus);
         this.parent.onBuySkill(skillPrice);
 
         return skillPrice;
     }
 
     public removeSkill() {
-        if (this.status === -1) {
+        if (this.status === SkillStatusEnum.NULL) {
             console.error('Unexpected error happened. Cannot remove unbought skill')
             return null;
         }
 
-        const prevStatus = this.status;
-        const skillPrice = this.price[prevStatus];
+        const skillPrice = this.getPriceByStatus(this.status)
+        const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] - 1);
 
-        this.changeStatus(prevStatus - 1 as SkillStatusType);
+        this.changeStatus(newStatus);
         this.parent.onRemoveSkill(skillPrice);
 
         return skillPrice;

@@ -1,5 +1,5 @@
 import { ITreeSerialized } from '../Tree';
-import { SkillStatusType } from '../shared/types';
+import { SkillStatusEnum } from '../Skill';
 
 export interface IRootSerialized {
     points: number,
@@ -9,7 +9,7 @@ export interface IRootSerialized {
 
 export interface ISkillChanges {
     id: string,
-    status: SkillStatusType,
+    status: SkillStatusEnum,
 }
 
 export interface ISubtreeChanges {
@@ -26,7 +26,7 @@ export interface IChanges {
 
 export interface IChangeableSKill {
     id: string,
-    getStatus: () => SkillStatusType,
+    getStatus: () => SkillStatusEnum,
 }
 
 export interface IChangeableSubtree {

@@ -1,4 +1,4 @@
-import { ISkill, Skill, ISkillParent } from './index';
+import { ISkill, Skill, ISkillParent, SkillStatusEnum } from './index';
 import { expect, test, describe, vi, beforeEach } from 'vitest'
 import { MOCKED_SKILL } from '../__tests__/mocks';
 
@@ -23,28 +23,28 @@ describe('Testing Skill purchase methods', () => {
     });
 
     test('Correct Skill buying behavior', () => {
-        expect(skill.getStatus()).toBe(-1);
+        expect(skill.getStatus()).toBe(SkillStatusEnum.NULL);
         skill.buySkill(false);
-        expect(skill.getStatus()).toBe(0);
+        expect(skill.getStatus()).toBe(SkillStatusEnum.BASIC);
         skill.buySkill(false);
-        expect(skill.getStatus()).toBe(1);
+        expect(skill.getStatus()).toBe(SkillStatusEnum.ACED);
     });
 
     test('Should not get higher status than aced version on skill purchase', () => {
         skill.buySkill(false);
         skill.buySkill(false);
         
-        expect(skill.getStatus()).toBe(1); // get Aced version
+        expect(skill.getStatus()).toBe(SkillStatusEnum.ACED); // get Aced version
 
         skill.buySkill(false);
 
-        expect(skill.getStatus()).toBe(1); // must remain with aced status
+        expect(skill.getStatus()).toBe(SkillStatusEnum.ACED); // must remain with aced status
     })
 
     test('Should not get lower status value than unbought skill status', () => {
-        expect(skill.getStatus()).toBe(-1); // must be -1 by default
+        expect(skill.getStatus()).toBe(SkillStatusEnum.NULL); // must be -1 by default
         skill.removeSkill();
 
-        expect(skill.getStatus()).toBe(-1);
+        expect(skill.getStatus()).toBe(SkillStatusEnum.NULL);
     })
 });

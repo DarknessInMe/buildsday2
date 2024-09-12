@@ -9,10 +9,11 @@ import {
 } from '../../__tests__';
 import { IRootSerialized, IChangeableSKill, IChangeableSubtree } from '../interfaces';
 import { INITIAL_POINTS_COUNT } from '../../shared/constants';
+import { SkillStatusEnum } from '../../Skill';
 
 const MOCKED_CHANGEABLE_SKILL: IChangeableSKill = {
     id: 'SKILL_ID',
-    getStatus: () => -1,
+    getStatus: () => SkillStatusEnum.NULL,
 };
 const MOCKED_CHANGEABLE_SUBTREE: IChangeableSubtree = {
     id: 'SUBTREE_ID',
@@ -52,7 +53,7 @@ export const MOCKED_ROOT_SERIALIZED: IRootSerialized = {
                     skills: {
                         [MOCKED_SKILL.id]: {
                             id: MOCKED_SKILL.id,
-                            status: -1,
+                            status: SkillStatusEnum.NULL,
                             pointsToAccess: MOCKED_SKILL.pointsToAccess,
                             name: MOCKED_SKILL.name,
                             description: MOCKED_SKILL.description,
@@ -73,7 +74,7 @@ export const MOCKED_ROOT_SERIALIZED: IRootSerialized = {
                     skills: {
                         [MOCKED_SKILL_2.id]: {
                             id: MOCKED_SKILL_2.id,
-                            status: -1,
+                            status: SkillStatusEnum.NULL,
                             pointsToAccess: MOCKED_SKILL_2.pointsToAccess,
                             name: MOCKED_SKILL_2.name,
                             description: MOCKED_SKILL_2.description,
