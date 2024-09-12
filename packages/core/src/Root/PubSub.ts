@@ -1,10 +1,10 @@
 import { 
     IChanges, 
-    ISkillChanges,
     ISubtreeChanges,
     IChangeableSKill,
-    IChangeableSubtree 
-} from '../shared/interfaces';
+    IChangeableSubtree,
+    ISkillChanges 
+} from './interfaces';
 
 export type SubscriberType = (changes: IChanges) => any;
 

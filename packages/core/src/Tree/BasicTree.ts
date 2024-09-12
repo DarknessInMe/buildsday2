@@ -1,20 +1,5 @@
 import { ISubtree, ISubtreeSerialized } from '../Subtree';
-import { ITreeQueryPayload } from '../shared/interfaces';
-
-export interface ITree {
-    subtrees: Map<string, ISubtree>,
-    id: string,
-    name: string;
-    query: (skillId: string) => ITreeQueryPayload | null,
-    addSubtree: (subtreeId: string, subtree: ISubtree) => ISubtree,
-    serialize: () => ITreeSerialized,
-}
-
-export interface ITreeSerialized {
-    id: string,
-    name: string,
-    subtrees: Record<string, ISubtreeSerialized>
-}
+import { ITree, ITreeSerialized, ITreeQueryPayload } from './interfaces';
 
 export class BasicTree implements ITree {
     public subtrees = new Map<string, ISubtree>;
@@ -25,7 +10,7 @@ export class BasicTree implements ITree {
     ) {}
 
     public serialize(): ITreeSerialized {
-        const subtrees = {};
+        const subtrees = {} as Record<string, ISubtreeSerialized>;
 
         this.subtrees.forEach((subtree, id) => {
             subtrees[id] = subtree.serialize();
@@ -34,12 +19,12 @@ export class BasicTree implements ITree {
         return {
             id: this.id,
             name: this.name,
-            subtrees: subtrees as Record<string, ISubtreeSerialized>,
+            subtrees,
         };
     }
 
-    public addSubtree(subtreeId: string, subtreeEntity: ISubtree) {
-        this.subtrees.set(subtreeId, subtreeEntity);
+    public addSubtree(subtreeEntity: ISubtree) {
+        this.subtrees.set(subtreeEntity.id, subtreeEntity);
 
         return subtreeEntity;
     }

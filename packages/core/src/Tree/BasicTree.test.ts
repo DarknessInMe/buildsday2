@@ -1,7 +1,8 @@
 import { expect, test, describe, beforeEach } from 'vitest';
 import { BasicSubtree, ISubtree } from '../Subtree';
 import { MOCKED_SUBTREE, MOCKED_TREE, MOCKED_SKILL, addSkill, IMockedSkill } from '../__tests__';
-import { BasicTree, ITree, ITreeSerialized } from './BasicTree';
+import { BasicTree } from './BasicTree';
+import { ITree, ITreeSerialized } from './interfaces';
 import { ISkill } from '../Skill';
 
 const MOCKED_SKILL_2: IMockedSkill = {
@@ -25,7 +26,7 @@ beforeEach(() => {
     subtree = new BasicSubtree(MOCKED_SUBTREE.id, MOCKED_SUBTREE.name);
     skill = addSkill(subtree, MOCKED_SKILL);
 
-    tree.addSubtree(subtree.id, subtree);
+    tree.addSubtree(subtree);
 })
 
 describe('Testing Tree query', () => {
@@ -49,8 +50,8 @@ describe('Testing Tree query', () => {
         addSkill(subtree2, MOCKED_SKILL_2);
         addSkill(subtree3, MOCKED_SKILL_3);
 
-        tree.addSubtree(subtree2.id, subtree2);
-        tree.addSubtree(subtree3.id, subtree3);
+        tree.addSubtree(subtree2);
+        tree.addSubtree(subtree3);
 
         const result = tree.query(MOCKED_SKILL_3.id);
 

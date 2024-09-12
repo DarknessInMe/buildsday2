@@ -1,13 +1,11 @@
-import { ITree } from '../Tree';
-import { ISkill } from '../Skill';
-import { ISubtree } from '../Subtree';
-import { SkillStatusType } from './types';
+import { ITreeSerialized } from '../Tree';
+import { SkillStatusType } from '../shared/types';
 
-export interface ITreeQueryPayload {
-    skill: ISkill,
-    subtree: ISubtree,
-    tree: ITree,
-}
+export interface IRootSerialized {
+    points: number,
+    isInfamyBonus: boolean,
+    trees: Record<string, ITreeSerialized>,
+};
 
 export interface ISkillChanges {
     id: string,
@@ -34,10 +32,4 @@ export interface IChangeableSKill {
 export interface IChangeableSubtree {
     id: string,
     getWastedPoints: () => number,
-}
-
-export interface ISkillParent {
-    validateSkillPoints: (pointsToAccess: number) => boolean;
-    onBuySkill: (points: number) => void;
-    onRemoveSkill: (points: number) => void;
 }

@@ -1,5 +1,4 @@
-import { ISkillParent } from '../shared/interfaces';
-import { ISkill, Skill } from './index';
+import { ISkill, Skill, ISkillParent } from './index';
 import { expect, test, describe, vi, beforeEach } from 'vitest'
 import { MOCKED_SKILL } from '../__tests__/mocks';
 

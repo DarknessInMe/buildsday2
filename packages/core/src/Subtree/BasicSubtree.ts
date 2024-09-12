@@ -1,30 +1,12 @@
-import { ISkill, ISkillSerialized, Skill } from '../Skill';
-import { ISkillParent } from '../shared/interfaces';
-
-export interface ISubtree extends ISkillParent {
-    id: string,
-    name: string,
-    skills: Map<string, ISkill>,
-    query: (skillId: string) => ISkill | null,
-    getWastedPoints: () => number,
-    wastePoints: (points: number) => void,
-    restorePoints: (points: number) => void,
-    serialize: () => ISubtreeSerialized,
-    addSkill: (
-        skillId: string,
-        name: string,
-        price: [number, number], 
-        description: [string, string], 
-        pointsToAccess: [number, number]
-    ) => ISkill,
-}
-
-export interface ISubtreeSerialized {
-    name: string,
-    id: string,
-    skills: Record<string, ISkillSerialized>,
-    pointsWasted: number,
-}
+import { 
+    ISkill, 
+    ISkillSerialized,
+    Skill, 
+    SkillDescriptionType, 
+    SkillPointsToAccessType, 
+    SkillPriceType
+} from '../Skill';
+import { ISubtree, ISubtreeSerialized } from './interfaces';
 
 export class BasicSubtree implements ISubtree {
     protected pointsWasted: number = 0;
@@ -36,7 +18,7 @@ export class BasicSubtree implements ISubtree {
     ) {}
 
     public serialize(): ISubtreeSerialized {
-        const skills = {};
+        const skills = {} as Record<string, ISkillSerialized>;
 
         this.skills.forEach((skill, id) => {
             skills[id] = skill.serialize();
@@ -46,7 +28,7 @@ export class BasicSubtree implements ISubtree {
             id: this.id,
             name: this.name,
             pointsWasted: this.getWastedPoints(),
-            skills: skills as Record<string, ISkillSerialized>,
+            skills,
         };
     }
 
@@ -81,9 +63,9 @@ export class BasicSubtree implements ISubtree {
     public addSkill(
         skillId: string,
         name: string,
-        price: [number, number], 
-        description: [string, string], 
-        pointsToAccess: [number, number]
+        price: SkillPriceType, 
+        description: SkillDescriptionType, 
+        pointsToAccess: SkillPointsToAccessType
     ) {
         const skill = new Skill(
             skillId,

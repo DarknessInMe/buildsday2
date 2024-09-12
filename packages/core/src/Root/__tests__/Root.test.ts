@@ -27,8 +27,8 @@ beforeEach(() => {
     addSkill(subtree1, MOCKED_SKILL);
     addSkill(subtree2, MOCKED_SKILL_2);
 
-    tree1.addSubtree(subtree1.id, subtree1);
-    tree2.addSubtree(subtree2.id, subtree2);
+    tree1.addSubtree(subtree1);
+    tree2.addSubtree(subtree2);
 
     root = new Root()
         .setTree(tree1.id, tree1)

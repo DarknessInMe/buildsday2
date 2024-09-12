@@ -3,12 +3,7 @@ import { INITIAL_POINTS_COUNT } from '../shared/constants';
 import { ISkill } from '../Skill';
 import { ISubtree } from '../Subtree';
 import { PubSub, Changes, SubscriberType } from './PubSub';
-
-export interface IRootSerialized {
-    points: number,
-    isInfamyBonus: boolean,
-    trees: Record<string, ITreeSerialized>,
-}
+import { IRootSerialized } from './interfaces';
 
 export class Root {
     public trees: Map<string, ITree> = new Map();
@@ -33,7 +28,7 @@ export class Root {
     }
 
     public serialize(): IRootSerialized {
-        const trees = {};
+        const trees = {} as Record<string, ITreeSerialized>;
 
         this.trees.forEach((tree, id) => {
             trees[id] = tree.serialize();
@@ -42,7 +37,7 @@ export class Root {
         return {
             points: this.points,
             isInfamyBonus: this.isInfamyBonus,
-            trees: trees as Record<string, ITreeSerialized>,
+            trees,
         }
     }
 

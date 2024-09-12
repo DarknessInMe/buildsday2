@@ -1,5 +1,4 @@
 import { Changes } from '../PubSub';
-import { IChangeableSKill, IChangeableSubtree } from '../../shared/interfaces';
 import { 
     MOCKED_TREE, 
     IMockedTree, 
@@ -8,7 +7,7 @@ import {
     MOCKED_SKILL, 
     IMockedSkill,
 } from '../../__tests__';
-import { IRootSerialized } from '../Root';
+import { IRootSerialized, IChangeableSKill, IChangeableSubtree } from '../interfaces';
 import { INITIAL_POINTS_COUNT } from '../../shared/constants';
 
 const MOCKED_CHANGEABLE_SKILL: IChangeableSKill = {
