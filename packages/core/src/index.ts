@@ -1,5 +1,4 @@
-import { Root } from './Root';
-
-const root = new Root();
-
-console.log('Change!', JSON.stringify(root, null, 2))
+export * from './Root';
+export * from './Skill';
+export * from './Subtree';
+export * from './Tree';
