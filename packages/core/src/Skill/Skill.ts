@@ -8,10 +8,6 @@ const STATUS_WEIGHT_MAP = {
     [SkillStatusEnum.ACED]: 1,
 };
 
-/**
- * TODO: 
- * 1. Add JSDoc
- */
 export class Skill implements ISkill {
     private status: SkillStatusEnum = SkillStatusEnum.NULL;
 
