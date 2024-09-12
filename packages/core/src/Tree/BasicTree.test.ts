@@ -3,7 +3,7 @@ import { BasicSubtree, ISubtree } from '../Subtree';
 import { MOCKED_SUBTREE, MOCKED_TREE, MOCKED_SKILL, addSkill, IMockedSkill } from '../__tests__';
 import { BasicTree } from './BasicTree';
 import { ITree, ITreeSerialized } from './interfaces';
-import { ISkill } from '../Skill';
+import { ISkill, SkillStatusEnum } from '../Skill';
 
 const MOCKED_SKILL_2: IMockedSkill = {
     ...MOCKED_SKILL,
@@ -74,7 +74,7 @@ describe('Testing serializing', () => {
                     skills: {
                         [MOCKED_SKILL.id]: {
                             id: MOCKED_SKILL.id,
-                            status: -1,
+                            status: SkillStatusEnum.NULL,
                             pointsToAccess: MOCKED_SKILL.pointsToAccess,
                             name: MOCKED_SKILL.name,
                             description: MOCKED_SKILL.description,
