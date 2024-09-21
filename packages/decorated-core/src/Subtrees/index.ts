@@ -5,3 +5,7 @@ export * from './SharpshooterSubtree';
 export * from './AmmoSpecialistSubtree';
 export * from './TankSubtree';
 export * from './ShotgunnerSubtree';
+
+export * from './EngineerSubtree';
+export * from './BreacherSubtree';
+export * from './OppressorSubtree';
