@@ -1,3 +1,2 @@
-import { MedicSubtree } from './Subtrees';
-
-console.log(new MedicSubtree());
+export { Root } from './Root';
+export * from './shared/enums';
