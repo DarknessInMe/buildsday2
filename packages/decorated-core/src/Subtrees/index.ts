@@ -13,3 +13,7 @@ export * from './OppressorSubtree';
 export * from './ShinobiSubtree';
 export * from './ArtfulDodgerSubtree';
 export * from './SilentKillerSubtree';
+
+export * from './GunslingerSubtree';
+export * from './RevenantSubtree';
+export * from './BrawlerSubtree';

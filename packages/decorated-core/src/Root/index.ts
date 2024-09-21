@@ -4,6 +4,7 @@ import {
     EnforcerTree, 
     TechnicianTree,
     GhostTree,
+    FugitiveTree,
 } from '../Trees';
 
 export class Root extends CoreRoot {
@@ -14,5 +15,6 @@ export class Root extends CoreRoot {
         this.setTree(new EnforcerTree());
         this.setTree(new TechnicianTree());
         this.setTree(new GhostTree());
+        this.setTree(new FugitiveTree());
     }
 }
