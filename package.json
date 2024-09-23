@@ -1,4 +1,4 @@
 {
     "name": "Buildsday2",
-    "workspaces": ["packages/core", "packages/decorated-core"]
+    "workspaces": ["packages/core", "packages/decorated-core", "packages/next-app"]
 }
