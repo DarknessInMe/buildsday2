@@ -1,12 +1,17 @@
 import { FC } from 'react';
-import { IBuildCard } from '@/shared/interfaces';
 
-export const BuildCard: FC<IBuildCard> = ({ name, description }) => {
+interface IBuildCardProps {
+   name: string;
+   description: string;
+   onClick: () => void;
+} 
+
+export const BuildCard: FC<IBuildCardProps> = ({ name, description, onClick }) => {
    return (
-      <div className='border-2 border-slate-500 border-solid'>
-         <div>
-            
-         </div>
+      <div 
+         className='border-2 border-slate-500 border-solid p-4 cursor-pointer'
+         onClick={onClick}
+      >
          <div>
             <h4>{name}</h4>
             <p>{description}</p>

@@ -5,5 +5,9 @@ export async function HomePageGrid() {
    const db = new InMemoryDBService();
    const builds = await db.fetchCards();
 
-   return <BuildsGrid items={builds}/>
+   return (
+      <BuildsGrid 
+         items={builds}
+      />
+   );
 };
