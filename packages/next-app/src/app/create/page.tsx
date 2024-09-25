@@ -1,3 +1,12 @@
+import { BuilderProvider } from '@/context/BuilderContext';
+import { Tree } from '@/components/Tree';
+import { TreePicker } from '@/components/TreePicker';
+
 export default function CreationPage() {
-    return <div>Creation Page</div>;
+   return (
+      <BuilderProvider>
+         <TreePicker />
+         <Tree />
+      </BuilderProvider>
+   )
 }
