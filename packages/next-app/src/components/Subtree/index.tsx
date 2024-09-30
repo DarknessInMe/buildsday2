@@ -9,9 +9,10 @@ interface ISubtreeProps {
    id: string,
    skills: Record<string, ISkillSerialized>,
    pointsWasted: number,
+   onSkillClick: (skillId: string) => void,
 };
 
-export const Subtree: FC<ISubtreeProps> = ({ name, pointsWasted, skills }) => {
+export const Subtree: FC<ISubtreeProps> = ({ name, pointsWasted, skills, onSkillClick }) => {
    return (
       <div>
          <h2 className="text-white text-center text-lg mb-4">
@@ -19,7 +20,11 @@ export const Subtree: FC<ISubtreeProps> = ({ name, pointsWasted, skills }) => {
          </h2>
          <div className="grid grid-cols-2 gap-3">
             {Object.values(skills).map(({ id, name }) => (
-               <div key={id} className="first:col-span-2 last:col-span-2 flex justify-center">
+               <div
+                  key={id}
+                  onClick={() => onSkillClick(id)}
+                  className="first:col-span-2 last:col-span-2 flex justify-center"
+               >
                   <Skill name={name}/>
                </div>
             ))}

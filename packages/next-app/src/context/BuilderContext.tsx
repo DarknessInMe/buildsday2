@@ -13,6 +13,9 @@ export interface IBuilderContextData {
    builderRef: MutableRefObject<Root>;
    serializedTreeRef: MutableRefObject<IRootSerialized>;
    changeCurrentTree: (treeId: string) => void;
+   selectSkillById: (skillId: string) => void;
+   totalPoints: number;
+   selectedSkillId: string | null;
 }
 
 const BuilderContext = createContext<IBuilderContextData>(null!);
@@ -22,6 +25,8 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
    const serializedTreeRef = useRef(builderRef.current.serialize());
 
    const [currentTree, setCurrentTree] = useState(() => serializedTreeRef.current.trees[TREE_IDS_ENUM.MASTERMIND]);
+   const [totalPoints, /**setTotalPoints **/] = useState(() => serializedTreeRef.current.points);
+   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
 
    const changeCurrentTree = useCallback((treeId: string) => {
       if (!(treeId in serializedTreeRef.current.trees)) {
@@ -31,12 +36,19 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
       setCurrentTree(serializedTreeRef.current.trees[treeId]);
    }, []);
 
+   const selectSkillById = useCallback((skillId: string) => {
+      setSelectedSkillId(skillId);
+   }, []);
+
    return (
       <BuilderContext.Provider value={{
          currentTree,
          builderRef,
          serializedTreeRef,
          changeCurrentTree,
+         selectSkillById,
+         totalPoints,
+         selectedSkillId,
       }}>
          {children}
       </BuilderContext.Provider>
