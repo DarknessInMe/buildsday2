@@ -14,10 +14,10 @@ interface ISubtreeProps {
 export const Subtree: FC<ISubtreeProps> = ({ name, pointsWasted, skills }) => {
    return (
       <div>
-         <h2 className="text-white text-center text-lg">
+         <h2 className="text-white text-center text-lg mb-4">
             {name} {pointsWasted}
          </h2>
-         <div className="grid grid-cols-2">
+         <div className="grid grid-cols-2 gap-3">
             {Object.values(skills).map(({ id, name }) => (
                <div key={id} className="first:col-span-2 last:col-span-2 flex justify-center">
                   <Skill name={name}/>
