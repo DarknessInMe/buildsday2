@@ -3,22 +3,25 @@
 import { Skill } from "@/ui/Skill";
 import { ISkillSerialized } from "@buildsday2/core";
 import { FC } from "react";
-// import { useBuilderContext } from "@/context/BuilderContext";
 
 interface ISubtreeProps {
    name: string,
    id: string,
    skills: Record<string, ISkillSerialized>,
    pointsWasted: number,
-}
+};
 
 export const Subtree: FC<ISubtreeProps> = ({ name, pointsWasted, skills }) => {
    return (
       <div>
-         <h3>{name} {pointsWasted}</h3>
-         <div>
+         <h2 className="text-white text-center text-lg">
+            {name} {pointsWasted}
+         </h2>
+         <div className="grid grid-cols-2">
             {Object.values(skills).map(({ id, name }) => (
-               <Skill name={name} key={id} />
+               <div key={id} className="first:col-span-2 last:col-span-2 flex justify-center">
+                  <Skill name={name}/>
+               </div>
             ))}
          </div>
       </div>

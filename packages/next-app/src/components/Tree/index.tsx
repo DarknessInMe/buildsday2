@@ -8,8 +8,7 @@ export const Tree = () => {
 
    return (
       <div>
-         <h1>{currentTree.name}</h1>
-         <div className="flex">
+         <div className="p-2 grid grid-cols-3 gap-4">
             {Object.values(currentTree.subtrees).map((subtree) => (
                <Subtree
                   key={subtree.id}
