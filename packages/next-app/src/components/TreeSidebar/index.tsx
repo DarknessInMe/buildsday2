@@ -21,9 +21,9 @@ export const TreeSidebar = () => {
          <h2 className="mb-8">Points remaining: {builderState.totalPoints}</h2>
          {skillData ? (
             <div>
-               <h3>Basic</h3>
+               <h3>Basic {skillData.price[0]}</h3>
                <p>{skillData.description[0]}</p>
-               <h3>Aced</h3>
+               <h3>Aced {skillData.price[1]}</h3>
                <p>{skillData.description[1]}</p>
             </div>
          ) : null}
