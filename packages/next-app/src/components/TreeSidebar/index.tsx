@@ -4,21 +4,21 @@ import { useMemo } from "react";
 import { useBuilderContext } from "@/context/BuilderContext";
 
 export const TreeSidebar = () => {
-   const { totalPoints, selectedSkillId, builderRef } = useBuilderContext();
+   const { builderState, builderRef } = useBuilderContext();
 
    const skillData = useMemo(() => {
-      if (!selectedSkillId) {
+      if (!builderState.selectedSkillId) {
          return null;
       }
 
-      const result = builderRef.current.query(selectedSkillId);
+      const result = builderRef.current.query(builderState.selectedSkillId);
 
       return result ? result.skill : null;
-   }, [selectedSkillId]);
+   }, [builderState.selectedSkillId]);
 
    return (
       <div>
-         <h2 className="mb-8">Points remaining: {totalPoints}</h2>
+         <h2 className="mb-8">Points remaining: {builderState.totalPoints}</h2>
          {skillData ? (
             <div>
                <h3>Basic</h3>

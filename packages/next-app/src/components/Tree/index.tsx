@@ -5,12 +5,12 @@ import { Subtree } from "../Subtree";
 import { TreeSidebar } from "../TreeSidebar";
 
 export const Tree = () => {
-   const { currentTree, selectSkillById } = useBuilderContext();
+   const { builderState, selectSkillById } = useBuilderContext();
 
    return (
       <div className="flex">
          <div className="p-2 grid grid-cols-3 gap-4 w-2/3">
-            {Object.values(currentTree.subtrees).map((subtree) => (
+            {Object.values(builderState.currentTree.subtrees).map((subtree) => (
                <Subtree
                   key={subtree.id}
                   name={subtree.name}

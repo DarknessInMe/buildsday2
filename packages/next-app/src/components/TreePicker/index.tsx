@@ -4,10 +4,8 @@ import { useMemo } from "react";
 import { useBuilderContext } from "@/context/BuilderContext";
 import clsx from 'clsx';
 
-const isActiveClassName = "bg-white text-black";
-
 export const TreePicker = () => {
-   const { serializedTreeRef, changeCurrentTree, currentTree } = useBuilderContext();
+   const { serializedTreeRef, changeCurrentTree, builderState } = useBuilderContext();
 
    const treePicker = useMemo(() => {
       return Object.values(serializedTreeRef.current.trees).map((tree) => ({
@@ -22,7 +20,10 @@ export const TreePicker = () => {
             <button 
                key={id}
                onClick={() => changeCurrentTree(id)}
-               className={clsx("text-white text-xl p-2", currentTree.id ===  id && isActiveClassName)}
+               className={clsx(
+                  "text-xl p-2", 
+                  builderState.currentTree.id === id ? "bg-white text-black" : "bg-transparent text-white",
+               )}
             >
                   {name}
                </button>
