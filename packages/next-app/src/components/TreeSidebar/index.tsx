@@ -19,6 +19,9 @@ export const TreeSidebar = () => {
    return (
       <div>
          <h2 className="mb-8">Points remaining: {builderState.totalPoints}</h2>
+         <div className="mb-8">
+            Tip: use Mouse Double Click to buy skill, Mouse Right Button Click to remove skill
+         </div>
          {skillData ? (
             <div>
                <h3>Basic {skillData.price[0]}</h3>
