@@ -19,7 +19,10 @@ const MOCKED_CHANGEABLE_SUBTREE: IChangeableSubtree = {
     id: 'SUBTREE_ID',
     getWastedPoints: () => 0,
 };
-export const MOCKED_CHANGES = new Changes(0, false, MOCKED_CHANGEABLE_SKILL, MOCKED_CHANGEABLE_SUBTREE);
+
+export const MOCKED_CHANGES = new Changes(
+   0, false, MOCKED_TREE.id, MOCKED_CHANGEABLE_SKILL, MOCKED_CHANGEABLE_SUBTREE
+);
 
 export const MOCKED_TREE_2: IMockedTree = {
     ...MOCKED_TREE,

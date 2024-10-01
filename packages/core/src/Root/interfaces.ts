@@ -20,8 +20,9 @@ export interface ISubtreeChanges {
 export interface IChanges {
     points: number,
     isInfamyBonus: boolean,
-    skill: ISkillChanges,
-    subtree: ISubtreeChanges,
+    skill: ISkillChanges | null,
+    subtree: ISubtreeChanges | null,
+    relatedTreeId: string | null,
 }
 
 export interface IChangeableSKill {

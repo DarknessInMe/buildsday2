@@ -3,7 +3,7 @@ import {
     ISubtreeChanges,
     IChangeableSKill,
     IChangeableSubtree,
-    ISkillChanges 
+    ISkillChanges,
 } from './interfaces';
 
 export type SubscriberType = (changes: IChanges) => any;
@@ -27,22 +27,23 @@ export class PubSub {
 }
 
 export class Changes implements IChanges {
-    public skill: ISkillChanges;
-    public subtree: ISubtreeChanges;
+    public skill: ISkillChanges | null = null;
+    public subtree: ISubtreeChanges | null = null;
 
     constructor(
         public points: number,
         public isInfamyBonus: boolean,
-        skill: IChangeableSKill,
-        subtree: IChangeableSubtree,
+        public relatedTreeId: string | null,
+        skill: IChangeableSKill | null,
+        subtree: IChangeableSubtree | null,
     ) {
-        this.skill = {
+        this.skill = skill ? {
             id: skill.id,
             status: skill.getStatus(),
-        };
-        this.subtree = {
+        } : null;
+        this.subtree = subtree ? {
             id: subtree.id,
             wastedPoints: subtree.getWastedPoints(),
-        }
+        } : null;
     }
 }

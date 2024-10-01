@@ -25,6 +25,7 @@ export class Root {
 
     public toggleInfamyBonus(infamyState: boolean) {
         this.isInfamyBonus = infamyState;
+        this.notifySubscribers()
     }
 
     public serialize(): IRootSerialized {
@@ -45,10 +46,15 @@ export class Root {
         return this.pubSub.onChange(callback);
     }
 
-    public notifySubscribers(skill: ISkill, subtree: ISubtree) {
+    public notifySubscribers(
+      skill: ISkill | null = null, 
+      subtree: ISubtree | null = null,
+      treeId: string | null = null,
+   ) {
         this.pubSub.notifySubscribers(new Changes(
             this.points,
             this.isInfamyBonus,
+            treeId,
             skill,
             subtree,
         ))
@@ -75,12 +81,12 @@ export class Root {
             return;
         }
 
-        const { skill, subtree } = result;
+        const { skill, subtree, tree } = result;
         const points = skill.buySkill(this.isInfamyBonus);
 
         if (typeof points === 'number') {
             this.operatePoints(points * -1);
-            this.notifySubscribers(skill, subtree);
+            this.notifySubscribers(skill, subtree, tree.id);
         }
     }
 
@@ -91,12 +97,12 @@ export class Root {
             return;
         }
 
-        const { skill, subtree } = result;
+        const { skill, subtree, tree } = result;
         const points = skill.removeSkill();
 
         if (typeof points === 'number') {
             this.operatePoints(points);
-            this.notifySubscribers(skill, subtree);
+            this.notifySubscribers(skill, subtree, tree.id);
         }
     }
 }
