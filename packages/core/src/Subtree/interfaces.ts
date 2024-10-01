@@ -4,11 +4,12 @@ import {
     SkillPriceType, 
     SkillDescriptionType, 
     SkillPointsToAccessType,
-    ISkillParent,
 } from '../Skill';
+import { IEntityParent } from '../shared/interfaces';
 
-export interface ISubtree extends ISkillParent {
+export interface ISubtree extends IEntityParent {
     id: string,
+    parent: IEntityParent | null,
     name: string,
     skills: Map<string, ISkill>,
     query: (skillId: string) => ISkill | null,
@@ -23,6 +24,7 @@ export interface ISubtree extends ISkillParent {
         description: SkillDescriptionType, 
         pointsToAccess: SkillPointsToAccessType
     ) => ISkill,
+    setParent: (parent: IEntityParent | null) => ISubtree,
 };
 
 export interface ISubtreeSerialized {

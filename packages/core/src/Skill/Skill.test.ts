@@ -1,9 +1,10 @@
-import { ISkill, Skill, ISkillParent, SkillStatusEnum } from './index';
+import { ISkill, Skill, SkillStatusEnum } from './index';
 import { expect, test, describe, vi, beforeEach } from 'vitest'
 import { MOCKED_SKILL } from '../__tests__/mocks';
+import { IEntityParent } from '../shared/interfaces';
 
-const MOCKED_PARENT: ISkillParent = {
-    validateSkillPoints: vi.fn(() => true),
+const MOCKED_PARENT: IEntityParent = {
+    verifySkillPurchase: vi.fn(() => true),
     onBuySkill: vi.fn(),
     onRemoveSkill: vi.fn(),
 }
@@ -18,8 +19,7 @@ describe('Testing Skill purchase methods', () => {
             MOCKED_SKILL.price,
             MOCKED_SKILL.description,
             MOCKED_SKILL.pointsToAccess,
-            MOCKED_PARENT,
-        )
+        ).setParent(MOCKED_PARENT)
     });
 
     test('Correct Skill buying behavior', () => {

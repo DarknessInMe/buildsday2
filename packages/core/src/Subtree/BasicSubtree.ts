@@ -7,15 +7,22 @@ import {
     SkillPriceType
 } from '../Skill';
 import { ISubtree, ISubtreeSerialized } from './interfaces';
+import { IEntityParent } from '../shared/interfaces';
 
 export class BasicSubtree implements ISubtree {
     protected pointsWasted: number = 0;
     public skills = new Map<string, ISkill>();
+    public parent: IEntityParent | null = null;
 
     constructor(
         public readonly id: string,
-        public readonly name: string
+        public readonly name: string,
     ) {}
+
+    public setParent(parent: IEntityParent | null) {
+      this.parent = parent;
+      return this;
+    }
 
     public serialize(): ISubtreeSerialized {
         const skills = {} as Record<string, ISkillSerialized>;
@@ -32,16 +39,18 @@ export class BasicSubtree implements ISubtree {
         };
     }
 
-    public validateSkillPoints(pointsToAccess: number) {
-        return pointsToAccess <= this.getWastedPoints();
-    };
+    public verifySkillPurchase(price: number, pointsToAccess: number) {
+      const parentVerification = this.parent ? this.parent.verifySkillPurchase(price, pointsToAccess) : true;
 
-    public onBuySkill(points: number) {
-        this.wastePoints(points);
-    };
+      return parentVerification && pointsToAccess <= this.getWastedPoints();
+    }
 
-    public onRemoveSkill(points: number) {
-        this.restorePoints(points);
+    public onBuySkill(price: number) {
+      this.wastePoints(price);
+    }
+
+    public onRemoveSkill(price: number) {
+      this.restorePoints(price);
     }
 
     public getWastedPoints() {
@@ -73,8 +82,7 @@ export class BasicSubtree implements ISubtree {
             price, 
             description,
             pointsToAccess,
-            this,
-        );
+        ).setParent(this);
 
         this.skills.set(skillId, skill);
 

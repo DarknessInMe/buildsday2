@@ -1,5 +1,6 @@
 import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
 import { SkillStatusEnum } from './enums';
+import { IEntityParent } from '../shared/interfaces';
 
 interface ISkillStaticData {
     id: string,
@@ -15,15 +16,10 @@ export interface ISkill extends ISkillStaticData{
     getStatus: () => SkillStatusEnum,
     serialize: () => ISkillSerialized,
     getPriceByStatus: (status: SkillStatusEnum) => number, 
+    setParent: (parent: IEntityParent | null) => ISkill,
 }
 
 export interface ISkillSerialized extends ISkillStaticData{
     status: SkillStatusEnum,
     pointsToAccess: SkillPointsToAccessType,
-}
-
-export interface ISkillParent {
-    validateSkillPoints: (pointsToAccess: number) => boolean;
-    onBuySkill: (points: number) => void;
-    onRemoveSkill: (points: number) => void;
 }

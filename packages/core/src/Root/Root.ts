@@ -4,8 +4,9 @@ import { ISkill } from '../Skill';
 import { ISubtree } from '../Subtree';
 import { PubSub, Changes, SubscriberType } from './PubSub';
 import { IRootSerialized } from './interfaces';
+import { IEntityParent } from '../shared/interfaces';
 
-export class Root {
+export class Root implements IEntityParent {
     public trees: Map<string, ITree> = new Map();
     public points: number = INITIAL_POINTS_COUNT;
     public isInfamyBonus: boolean = false;
@@ -18,7 +19,7 @@ export class Root {
     }
 
     public setTree(tree: ITree) {
-        this.trees.set(tree.id, tree);
+        this.trees.set(tree.id, tree.setParent(this));
 
         return this;
     }
@@ -44,6 +45,18 @@ export class Root {
 
     public onChange(callback: SubscriberType) {
         return this.pubSub.onChange(callback);
+    }
+
+    public verifySkillPurchase(price: number) {
+      return this.points - price >= 0;
+    }
+
+    public onBuySkill(price: number) {
+      this.operatePoints(price);
+    }
+
+    public onRemoveSkill(price: number) {
+      this.operatePoints(price * -1);
     }
 
     public notifySubscribers(
@@ -85,7 +98,6 @@ export class Root {
         const points = skill.buySkill(this.isInfamyBonus);
 
         if (typeof points === 'number') {
-            this.operatePoints(points * -1);
             this.notifySubscribers(skill, subtree, tree.id);
         }
     }
@@ -101,7 +113,6 @@ export class Root {
         const points = skill.removeSkill();
 
         if (typeof points === 'number') {
-            this.operatePoints(points);
             this.notifySubscribers(skill, subtree, tree.id);
         }
     }

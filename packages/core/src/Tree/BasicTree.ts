@@ -1,13 +1,33 @@
 import { ISubtree, ISubtreeSerialized } from '../Subtree';
 import { ITree, ITreeSerialized, ITreeQueryPayload } from './interfaces';
+import { IEntityParent } from '../shared/interfaces';
 
 export class BasicTree implements ITree {
     public subtrees = new Map<string, ISubtree>;
+    public parent: IEntityParent | null = null;
 
     constructor(
         public readonly id: string,
-        public readonly name: string
+        public readonly name: string,
+        
     ) {}
+
+    public setParent(parent: IEntityParent | null) {
+      this.parent = parent;
+      return this;
+    }
+
+    public verifySkillPurchase(price: number, pointsToAccess: number) {
+      return this.parent ? this.parent.verifySkillPurchase(price, pointsToAccess) : true;
+    }
+
+    public onBuySkill(price: number) {
+      this.parent?.onBuySkill?.(price);
+    }
+
+    public onRemoveSkill(price: number) {
+      this.parent?.onRemoveSkill?.(price);
+    }
 
     public serialize(): ITreeSerialized {
         const subtrees = {} as Record<string, ISubtreeSerialized>;
@@ -24,7 +44,7 @@ export class BasicTree implements ITree {
     }
 
     public addSubtree(subtreeEntity: ISubtree) {
-        this.subtrees.set(subtreeEntity.id, subtreeEntity);
+        this.subtrees.set(subtreeEntity.id, subtreeEntity.setParent(this));
 
         return subtreeEntity;
     }

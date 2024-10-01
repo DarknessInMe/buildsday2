@@ -1,6 +1,7 @@
-import { ISkill, ISkillSerialized, ISkillParent } from './interfaces';
+import { ISkill, ISkillSerialized } from './interfaces';
 import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
 import { SkillStatusEnum } from './enums';
+import { IEntityParent } from '../shared/interfaces';
 
 const STATUS_WEIGHT_MAP = {
     [SkillStatusEnum.NULL]: -1,
@@ -10,6 +11,7 @@ const STATUS_WEIGHT_MAP = {
 
 export class Skill implements ISkill {
     private status: SkillStatusEnum = SkillStatusEnum.NULL;
+    public parent: IEntityParent | null = null;
 
     constructor(
         public id: string,
@@ -17,11 +19,15 @@ export class Skill implements ISkill {
         public price: SkillPriceType,
         public description: SkillDescriptionType,
         private pointsToAccess: SkillPointsToAccessType,
-        public parent: ISkillParent,
     ) {}
 
     private changeStatus(status: SkillStatusEnum) {
         this.status = status
+    }
+
+    public setParent(parent: IEntityParent | null) {
+      this.parent = parent;
+      return this;
     }
 
     public serialize(): ISkillSerialized {
@@ -67,15 +73,15 @@ export class Skill implements ISkill {
             return null;
         }
 
-        if (!this.parent.validateSkillPoints(this.getPointsToAccess(isInfamyBonus))) {
-            return null;
-        }
-
         const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] + 1);
         const skillPrice = this.getPriceByStatus(newStatus)
 
+        if (this.parent && !this.parent.verifySkillPurchase(skillPrice, this.getPointsToAccess(isInfamyBonus))) {
+         return null;
+     }
+
         this.changeStatus(newStatus);
-        this.parent.onBuySkill(skillPrice);
+        this.parent?.onBuySkill?.(skillPrice);
 
         return skillPrice;
     }
@@ -90,7 +96,7 @@ export class Skill implements ISkill {
         const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] - 1);
 
         this.changeStatus(newStatus);
-        this.parent.onRemoveSkill(skillPrice);
+        this.parent?.onRemoveSkill?.(skillPrice);
 
         return skillPrice;
     }
