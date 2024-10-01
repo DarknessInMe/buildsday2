@@ -1,7 +1,7 @@
 import { ISkill, ISkillSerialized } from './interfaces';
 import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
 import { SkillStatusEnum } from './enums';
-import { IEntityParent } from '../shared/interfaces';
+import { IEntityParent, IGlobalContext } from '../shared/interfaces';
 
 const STATUS_WEIGHT_MAP = {
     [SkillStatusEnum.NULL]: -1,
@@ -10,94 +10,106 @@ const STATUS_WEIGHT_MAP = {
 };
 
 export class Skill implements ISkill {
-    private status: SkillStatusEnum = SkillStatusEnum.NULL;
-    public parent: IEntityParent | null = null;
+   private status: SkillStatusEnum = SkillStatusEnum.NULL;
+   public parent: IEntityParent | null = null;
+   public context: IGlobalContext | null = null;
 
-    constructor(
-        public id: string,
-        public name: string,
-        public price: SkillPriceType,
-        public description: SkillDescriptionType,
-        private pointsToAccess: SkillPointsToAccessType,
-    ) {}
+   constructor(
+      public id: string,
+      public name: string,
+      public price: SkillPriceType,
+      public description: SkillDescriptionType,
+      private pointsToAccess: SkillPointsToAccessType,
+   ) {}
 
-    private changeStatus(status: SkillStatusEnum) {
-        this.status = status
-    }
+   private changeStatus(status: SkillStatusEnum) {
+      this.status = status
+   }
 
-    public setParent(parent: IEntityParent | null) {
+   public setParent(parent: IEntityParent | null) {
       this.parent = parent;
       return this;
-    }
+   }
 
-    public serialize(): ISkillSerialized {
-        return {
-            id: this.id,
-            status: this.getStatus(),
-            pointsToAccess: this.pointsToAccess,
-            name: this.name,
-            description: this.description,
-            price: this.price,
-        }
-    }
+   public setContext(context: IGlobalContext | null) {
+      this.context = context;
+      return this;
+   };
 
-    public getStatus() {
-        return this.status;
-    }
+   public serialize(): ISkillSerialized {
+      return {
+         id: this.id,
+         status: this.getStatus(),
+         pointsToAccess: this.pointsToAccess,
+         name: this.name,
+         description: this.description,
+         price: this.price,
+      }
+   }
 
-    public getPointsToAccess(isInfamyBonus: boolean) {
-        return this.pointsToAccess[isInfamyBonus ? 0 : 1]
-    }
+   public getStatus() {
+      return this.status;
+   }
 
-    public getPriceByStatus(status: SkillStatusEnum) {
-        if (status === SkillStatusEnum.NULL) {
-            return 0;
-        };
+   public getPointsToAccess() {
+      const isInfamyBonus = this.context?.getIsInfamyBonusActive?.() ?? false;
 
-        return this.price[SkillStatusEnum.BASIC === status ? 0 : 1];
-    }
+      return this.pointsToAccess[isInfamyBonus ? 0 : 1]
+   }
 
-    private getStatusByWeight(weight: number): SkillStatusEnum {
-        for (const statusKey in STATUS_WEIGHT_MAP) {
-            if (STATUS_WEIGHT_MAP[statusKey] === weight) {
-                return statusKey as SkillStatusEnum;
-            }
-        }
-        console.error(`Could not get Skill status by weight for ${this.id}`);
-        return SkillStatusEnum.NULL;
-    }
+   public getPriceByStatus(status: SkillStatusEnum) {
+      if (status === SkillStatusEnum.NULL) {
+         return 0;
+      };
 
-    public buySkill(isInfamyBonus: boolean) {
-        if (this.status === SkillStatusEnum.ACED) {
-            console.error('Unexpected error happened. Cannot buy already aced skill')
-            return null;
-        }
+      return this.price[SkillStatusEnum.BASIC === status ? 0 : 1];
+   }
 
-        const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] + 1);
-        const skillPrice = this.getPriceByStatus(newStatus)
+   private getStatusByWeight(weight: number): SkillStatusEnum {
+      for (const statusKey in STATUS_WEIGHT_MAP) {
+         if (STATUS_WEIGHT_MAP[statusKey] === weight) {
+               return statusKey as SkillStatusEnum;
+         }
+      }
+      console.error(`Could not get Skill status by weight for ${this.id}`);
+      return SkillStatusEnum.NULL;
+   }
 
-        if (this.parent && !this.parent.verifySkillPurchase(skillPrice, this.getPointsToAccess(isInfamyBonus))) {
-          return null;
-        }
+   public buySkill() {
+      if (this.status === SkillStatusEnum.ACED) {
+         console.error('Unexpected error happened. Cannot buy already aced skill')
+         return null;
+      }
 
-        this.changeStatus(newStatus);
-        this.parent?.onBuySkill?.(skillPrice);
+      const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] + 1);
+      const skillPrice = this.getPriceByStatus(newStatus)
 
-        return skillPrice;
-    }
+      if (this.parent && !this.parent.verifySkillPurchase(skillPrice, this.getPointsToAccess())) {
+         return null;
+      }
 
-    public removeSkill() {
-        if (this.status === SkillStatusEnum.NULL) {
-            console.error('Unexpected error happened. Cannot remove unbought skill')
-            return null;
-        }
+      this.changeStatus(newStatus);
+      this.parent?.onBuySkill?.(skillPrice);
 
-        const skillPrice = this.getPriceByStatus(this.status)
-        const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] - 1);
+      return skillPrice;
+   }
 
-        this.changeStatus(newStatus);
-        this.parent?.onRemoveSkill?.(skillPrice);
+   public removeSkill() {
+      if (this.status === SkillStatusEnum.NULL) {
+         console.error('Unexpected error happened. Cannot remove unbought skill')
+         return null;
+      }
 
-        return skillPrice;
-    }
+      const skillPrice = this.getPriceByStatus(this.status)
+      const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] - 1);
+
+      if (this.parent && !this.parent.verifySKillDeletion(skillPrice, this.id)) {
+         return null;
+      }
+
+      this.changeStatus(newStatus);
+      this.parent?.onRemoveSkill?.(skillPrice);
+
+      return skillPrice;
+   }
 }

@@ -34,3 +34,11 @@ export interface IChangeableSubtree {
     id: string,
     getWastedPoints: () => number,
 }
+
+export interface IContextualComponent {
+   isInfamyBonus: boolean;
+}
+
+export interface IGlobalContext {
+   getIsInfamyBonusActive: () => boolean;
+}

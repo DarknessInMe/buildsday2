@@ -8,12 +8,17 @@ import {
     addSkill 
 } from '../__tests__';
 import { SkillStatusEnum } from '../Skill';
+import { IGlobalContext } from '../shared/interfaces';
 
 const MOCKED_SKILL_2: IMockedSkill = {
     ...MOCKED_SKILL,
     id: 'SKILL_ID_2',
     name: 'Testing Skill 2',
 };
+
+const MOCKED_CONTEXT: IGlobalContext = {
+   getIsInfamyBonusActive: () => true,
+}
 
 let subtree: ISubtree;
 
@@ -46,7 +51,7 @@ describe('Testing skills purchasing', () => {
     test('Should be able to buy skills', () => {
         const skill = addSkill(subtree, MOCKED_SKILL);
 
-        const pointsWastedForSkill = skill.buySkill(false);
+        const pointsWastedForSkill = skill.buySkill();
 
         expect(skill.getStatus()).toBe(SkillStatusEnum.BASIC);
         expect(subtree.getWastedPoints()).toBe(pointsWastedForSkill);
@@ -54,7 +59,7 @@ describe('Testing skills purchasing', () => {
     test('Should be able to remove skills', () => {
         const skill = addSkill(subtree, MOCKED_SKILL);
 
-        skill.buySkill(false);
+        skill.buySkill();
         skill.removeSkill();
 
         expect(skill.getStatus()).toBe(SkillStatusEnum.NULL);
@@ -68,7 +73,7 @@ describe('Testing skills purchasing', () => {
 
         const skill = addSkill(subtree, MODIFIED_SKILL);
 
-        skill.buySkill(false);
+        skill.buySkill();
 
         expect(skill.getStatus()).toBe(SkillStatusEnum.NULL);
         expect(subtree.getWastedPoints()).toBe(0);
@@ -88,9 +93,9 @@ describe('Testing skills purchasing', () => {
         const cheapSkill = addSkill(subtree, CHEAP_SKILL);
         const expensiveSkill = addSkill(subtree, EXPENSIVE_SKILL);
         
-        cheapSkill.buySkill(false);
-        cheapSkill.buySkill(false); // acing same skill
-        expensiveSkill.buySkill(false);
+        cheapSkill.buySkill();
+        cheapSkill.buySkill(); // acing same skill
+        expensiveSkill.buySkill();
 
         expect(cheapSkill.getStatus()).toBe(SkillStatusEnum.ACED);
         expect(expensiveSkill.getStatus()).toBe(SkillStatusEnum.BASIC);
@@ -108,19 +113,19 @@ describe('Testing skills purchasing', () => {
             pointsToAccess: [2, 3],
         };
 
-        const cheapSkill = addSkill(subtree, CHEAP_SKILL);
-        const expensiveSkill = addSkill(subtree, EXPENSIVE_SKILL);
+        const cheapSkill = addSkill(subtree, CHEAP_SKILL).setContext(MOCKED_CONTEXT);
+        const expensiveSkill = addSkill(subtree, EXPENSIVE_SKILL).setContext(MOCKED_CONTEXT);
         
-        cheapSkill.buySkill(false);
-        cheapSkill.buySkill(false);
+        cheapSkill.buySkill();
+        cheapSkill.buySkill();
     
-        expensiveSkill.buySkill(false);
+        expensiveSkill.buySkill();
 
         // Expensive skill requires 3 points without infamy bonus. Currently, 
         // only 2 skill points were gained by subtree. Expensive must not be bought
         expect(expensiveSkill.getStatus()).toBe(SkillStatusEnum.NULL);
 
-        expensiveSkill.buySkill(true);
+        expensiveSkill.buySkill();
 
         // Now, expensive skill has been bought with infamy bonus, which requires 2 points to access.
         expect(expensiveSkill.getStatus()).toBe(SkillStatusEnum.BASIC);
