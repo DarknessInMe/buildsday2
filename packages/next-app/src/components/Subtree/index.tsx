@@ -10,9 +10,16 @@ interface ISubtreeProps {
    skills: Record<string, ISkillSerialized>,
    pointsWasted: number,
    onSkillClick: (skillId: string) => void,
+   onSkillDblClick: (skillId: string) => void,
 };
 
-export const Subtree: FC<ISubtreeProps> = ({ name, pointsWasted, skills, onSkillClick }) => {
+export const Subtree: FC<ISubtreeProps> = ({ 
+   name, 
+   pointsWasted, 
+   skills, 
+   onSkillClick,
+   onSkillDblClick,
+}) => {
    return (
       <div>
          <h2 className="text-white text-center text-lg mb-4">
@@ -23,6 +30,7 @@ export const Subtree: FC<ISubtreeProps> = ({ name, pointsWasted, skills, onSkill
                <div
                   key={id}
                   onClick={() => onSkillClick(id)}
+                  onDoubleClick={() => onSkillDblClick(id)}
                   className="first:col-span-2 last:col-span-2 flex justify-center"
                >
                   <Skill name={name}/>

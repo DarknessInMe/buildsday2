@@ -1,5 +1,14 @@
 "use client"
-import { FC, createContext, useContext, useRef, useCallback, MutableRefObject, useReducer } from "react";
+import { 
+   FC, 
+   MutableRefObject,
+   createContext,
+   useContext, 
+   useRef, 
+   useCallback, 
+   useReducer,
+   useEffect, 
+} from "react";
 import { ReactNode } from "react";
 import { TREE_IDS_ENUM, Root } from '@buildsday2/decorated-core';
 import { IRootSerialized } from "@buildsday2/core";
@@ -15,6 +24,7 @@ export interface IBuilderContextData {
    serializedTreeRef: MutableRefObject<IRootSerialized>;
    changeCurrentTree: (treeId: string) => void;
    selectSkillById: (skillId: string) => void;
+   buySkill: (skillId: string) => void;
    builderState: IBuilderState;
 }
 
@@ -29,6 +39,16 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
       totalPoints: serializedTreeRef.current.points,
       selectedSkillId: '',
    }));
+
+   useEffect(() => {
+      const unsubscribe = builderRef.current.onChange((...args) => {
+         console.log(args);
+      });
+
+      return () => {
+         unsubscribe();
+      }
+   }, [])
 
    const changeCurrentTree = useCallback((treeId: string) => {
       if (!(treeId in serializedTreeRef.current.trees)) {
@@ -48,11 +68,16 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
       })
    }, []);
 
+   const buySkill = useCallback((skillId: string) => {
+      builderRef.current.buySkill(skillId);
+   }, []);
+
    return (
       <BuilderContext.Provider value={{
          builderRef,
          serializedTreeRef,
          changeCurrentTree,
+         buySkill,
          selectSkillById,
          builderState: state,
       }}>
