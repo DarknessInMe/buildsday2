@@ -77,8 +77,8 @@ export class Skill implements ISkill {
         const skillPrice = this.getPriceByStatus(newStatus)
 
         if (this.parent && !this.parent.verifySkillPurchase(skillPrice, this.getPointsToAccess(isInfamyBonus))) {
-         return null;
-     }
+          return null;
+        }
 
         this.changeStatus(newStatus);
         this.parent?.onBuySkill?.(skillPrice);

@@ -46,10 +46,12 @@ export class BasicSubtree implements ISubtree {
     }
 
     public onBuySkill(price: number) {
+      this.parent?.onBuySkill?.(price)
       this.wastePoints(price);
     }
 
     public onRemoveSkill(price: number) {
+      this.parent?.onRemoveSkill?.(price)
       this.restorePoints(price);
     }
 

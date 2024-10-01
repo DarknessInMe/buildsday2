@@ -52,11 +52,11 @@ export class Root implements IEntityParent {
     }
 
     public onBuySkill(price: number) {
-      this.operatePoints(price);
+      this.operatePoints(price * -1);
     }
 
     public onRemoveSkill(price: number) {
-      this.operatePoints(price * -1);
+      this.operatePoints(price);
     }
 
     public notifySubscribers(
