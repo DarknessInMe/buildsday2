@@ -25,6 +25,7 @@ export interface IBuilderContextData {
    changeCurrentTree: (treeId: string) => void;
    selectSkillById: (skillId: string) => void;
    buySkill: (skillId: string) => void;
+   removeSkill: (skillId: string) => void;
    builderState: IBuilderState;
 }
 
@@ -33,16 +34,32 @@ const BuilderContext = createContext<IBuilderContextData>(null!);
 export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
    const builderRef = useRef(new Root());
    const serializedTreeRef = useRef(builderRef.current.serialize());
+   const currentTreeIdRef = useRef<string | null>(null); // necessary to handle subscription in useEffect
 
    const [state, dispatch] = useReducer(reducer, INITIAL_STATE, () => ({
       currentTree: serializedTreeRef.current.trees[TREE_IDS_ENUM.MASTERMIND],
       totalPoints: serializedTreeRef.current.points,
       selectedSkillId: '',
    }));
+   currentTreeIdRef.current = state.currentTree?.id || null;
 
    useEffect(() => {
-      const unsubscribe = builderRef.current.onChange((...args) => {
-         console.log(args);
+      const unsubscribe = builderRef.current.onChange(({ relatedTreeId, skill, subtree }) => {
+         if (relatedTreeId && skill && subtree) {
+            const localTree = serializedTreeRef.current.trees[relatedTreeId];
+            const localSubtree = localTree.subtrees[subtree.id];
+            const localSkill = localSubtree.skills[skill.id];
+
+            localSkill.status = skill.status;
+            localSubtree.pointsWasted = subtree.wastedPoints;
+            
+            if (currentTreeIdRef.current === relatedTreeId) {
+               dispatch({
+                  type: BuilderActionTypeEnum.SET_CURRENT_TREE,
+                  payload: serializedTreeRef.current.trees[relatedTreeId]
+               });
+            }
+         }
       });
 
       return () => {
@@ -72,12 +89,17 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
       builderRef.current.buySkill(skillId);
    }, []);
 
+   const removeSkill = useCallback((skillId: string) => {
+      builderRef.current.removeSkill(skillId);
+   }, []);
+
    return (
       <BuilderContext.Provider value={{
          builderRef,
          serializedTreeRef,
          changeCurrentTree,
          buySkill,
+         removeSkill,
          selectSkillById,
          builderState: state,
       }}>

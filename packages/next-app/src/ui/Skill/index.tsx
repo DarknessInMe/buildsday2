@@ -20,7 +20,7 @@ const getStylesByStatus = (status: SkillStatusEnum) => {
          return "bg-blue-900";
       }
       case SkillStatusEnum.ACED: {
-         return "bg-blue-800"
+         return "bg-blue-600"
       }
    }
 };

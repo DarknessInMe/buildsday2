@@ -5,7 +5,12 @@ import { Subtree } from "../Subtree";
 import { TreeSidebar } from "../TreeSidebar";
 
 export const Tree = () => {
-   const { builderState, selectSkillById, buySkill } = useBuilderContext();
+   const { 
+      builderState, 
+      selectSkillById, 
+      buySkill,
+      removeSkill,
+   } = useBuilderContext();
 
    return (
       <div className="flex">
@@ -18,7 +23,8 @@ export const Tree = () => {
                   pointsWasted={subtree.pointsWasted}
                   skills={subtree.skills}
                   onSkillClick={selectSkillById}
-                  onSkillDblClick={buySkill}
+                  onSkillPurchase={buySkill}
+                  onSkillRemove={removeSkill}
                />
             ))}
          </div>
