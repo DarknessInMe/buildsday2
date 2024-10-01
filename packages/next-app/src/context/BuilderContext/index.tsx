@@ -44,7 +44,14 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
    currentTreeIdRef.current = state.currentTree?.id || null;
 
    useEffect(() => {
-      const unsubscribe = builderRef.current.onChange(({ relatedTreeId, skill, subtree }) => {
+      const unsubscribe = builderRef.current.onChange(({ relatedTreeId, skill, subtree, points }) => {
+         if (serializedTreeRef.current.points !== points) {
+            dispatch({
+               type: BuilderActionTypeEnum.SET_TOTAL_POINTS,
+               payload: points,
+            })
+         }
+   
          if (relatedTreeId && skill && subtree) {
             const localTree = serializedTreeRef.current.trees[relatedTreeId];
             const localSubtree = localTree.subtrees[subtree.id];
