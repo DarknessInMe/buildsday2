@@ -1,6 +1,6 @@
 export interface IEntityParent {
    verifySkillPurchase: (price: number, pointsToAccess: number) => boolean;
-   verifySKillDeletion: (price: number, skillId: string) => boolean;
+   verifySkillDeletion: (tier: number, price: number, skillId: string) => boolean;
    onBuySkill: (price: number) => void;
    onRemoveSkill: (price: number) => void;
 }

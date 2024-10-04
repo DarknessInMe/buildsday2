@@ -23,6 +23,7 @@ export interface ISubtree extends IEntityParent, IComponentWithContext, ICompone
    addSkill: (
       skillId: string,
       name: string,
+      tier: number,
       price: SkillPriceType, 
       description: SkillDescriptionType, 
       pointsToAccess: SkillPointsToAccessType

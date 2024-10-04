@@ -2,11 +2,12 @@ import { ISkill, ISkillSerialized } from './interfaces';
 import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
 import { SkillStatusEnum } from './enums';
 import { IEntityParent, IGlobalContext } from '../shared/interfaces';
+import type { Connection } from './Connection';
 
 const STATUS_WEIGHT_MAP = {
-    [SkillStatusEnum.NULL]: -1,
-    [SkillStatusEnum.BASIC]: 0,
-    [SkillStatusEnum.ACED]: 1,
+   [SkillStatusEnum.NULL]: -1,
+   [SkillStatusEnum.BASIC]: 0,
+   [SkillStatusEnum.ACED]: 1,
 };
 
 export class Skill implements ISkill {
@@ -19,12 +20,8 @@ export class Skill implements ISkill {
       public name: string,
       public price: SkillPriceType,
       public description: SkillDescriptionType,
-      private pointsToAccess: SkillPointsToAccessType,
+      protected connection: Connection,
    ) {}
-
-   private changeStatus(status: SkillStatusEnum) {
-      this.status = status
-   }
 
    public setParent(parent: IEntityParent | null) {
       this.parent = parent;
@@ -40,10 +37,10 @@ export class Skill implements ISkill {
       return {
          id: this.id,
          status: this.getStatus(),
-         pointsToAccess: this.pointsToAccess,
          name: this.name,
          description: this.description,
          price: this.price,
+         tier: this.connection.getTier(),
       }
    }
 
@@ -51,10 +48,14 @@ export class Skill implements ISkill {
       return this.status;
    }
 
+   public getTier() {
+      return this.connection.getTier();
+   }
+
    public getPointsToAccess() {
       const isInfamyBonus = this.context?.getIsInfamyBonusActive?.() ?? false;
 
-      return this.pointsToAccess[isInfamyBonus ? 0 : 1]
+      return this.connection.getPointsToAccess(isInfamyBonus);
    }
 
    public getPriceByStatus(status: SkillStatusEnum) {
@@ -88,7 +89,7 @@ export class Skill implements ISkill {
          return null;
       }
 
-      this.changeStatus(newStatus);
+      this.status = newStatus;
       this.parent?.onBuySkill?.(skillPrice);
 
       return skillPrice;
@@ -103,11 +104,15 @@ export class Skill implements ISkill {
       const skillPrice = this.getPriceByStatus(this.status)
       const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] - 1);
 
-      if (this.parent && !this.parent.verifySKillDeletion(skillPrice, this.id)) {
+      if (this.parent && !this.parent.verifySkillDeletion(
+         this.connection.getTier(),
+         skillPrice, 
+         this.id
+      )) {
          return null;
       }
 
-      this.changeStatus(newStatus);
+      this.status = newStatus;
       this.parent?.onRemoveSkill?.(skillPrice);
 
       return skillPrice;

@@ -19,3 +19,5 @@ export type SkillDescriptionType = [string, string];
  * SkillPointsToAccessType[1] - skill points must be wasted without Infamy bonus
  */
 export type SkillPointsToAccessType = [number, number];
+
+export type SkillTierType = 1 | 2 | 3 | 4;

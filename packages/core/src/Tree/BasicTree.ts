@@ -27,8 +27,10 @@ export class BasicTree implements ITree {
       return this.parent ? this.parent.verifySkillPurchase(price, pointsToAccess) : true;
     }
 
-    public verifySKillDeletion(price: number, skillId: string) {
-      return this.parent ? this.parent.verifySKillDeletion(price, skillId) : true;
+    public verifySkillDeletion(...args) {
+      // TODO: Find out how properly type arguments spreading
+      // @ts-ignore
+      return this.parent ? this.parent.verifySkillDeletion(...args) : true;
     };
 
     public onBuySkill(price: number) {

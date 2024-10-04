@@ -1,5 +1,5 @@
 export enum SkillStatusEnum {
-    NULL = 'NULL',
-    BASIC = 'BASIC',
-    ACED = 'ACED',
-}
+   NULL = 'NULL',
+   BASIC = 'BASIC',
+   ACED = 'ACED',
+};

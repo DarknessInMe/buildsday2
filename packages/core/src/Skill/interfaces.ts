@@ -1,4 +1,4 @@
-import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
+import { SkillPriceType, SkillDescriptionType } from './types';
 import { SkillStatusEnum } from './enums';
 import { 
    IComponentWithContext,
@@ -17,11 +17,12 @@ export interface ISkill extends ISkillStaticData, IComponentWithContext, ICompon
    removeSkill: () => number | null,
    getPointsToAccess: () => number,
    getStatus: () => SkillStatusEnum,
+   getTier: () => number,
    serialize: () => ISkillSerialized,
    getPriceByStatus: (status: SkillStatusEnum) => number, 
 }
 
 export interface ISkillSerialized extends ISkillStaticData{
    status: SkillStatusEnum,
-   pointsToAccess: SkillPointsToAccessType,
+   tier: number,
 }

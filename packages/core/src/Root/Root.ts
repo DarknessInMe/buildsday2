@@ -56,7 +56,7 @@ export class Root implements IEntityParent {
       return this.points - price >= 0;
    }
 
-   public verifySKillDeletion() {
+   public verifySkillDeletion() {
       return true;
    };
 
