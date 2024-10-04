@@ -9,12 +9,13 @@ import { Context } from './Context';
 
 export class Root implements IEntityParent {
    public trees: Map<string, ITree> = new Map();
-   public points: number = INITIAL_POINTS_COUNT;
    public isInfamyBonus: boolean = false;
    private pubSub = new PubSub();
    private context = new Context(this);
 
-   constructor() {}
+   constructor(
+      public points: number = INITIAL_POINTS_COUNT,
+   ) {}
 
    private operatePoints(acc: number) {
       this.points += acc;
