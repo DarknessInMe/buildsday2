@@ -49,20 +49,20 @@ export const MOCKED_ROOT_SERIALIZED: IRootSerialized = {
             id: MOCKED_TREE.id,
             name: MOCKED_TREE.name,
             subtrees: {
-                [MOCKED_SUBTREE.id]: {
-                    id: MOCKED_SUBTREE.id,
-                    name: MOCKED_SUBTREE.name,
-                    pointsWasted: 0,
-                    skills: {
+                  [MOCKED_SUBTREE.id]: {
+                     id: MOCKED_SUBTREE.id,
+                     name: MOCKED_SUBTREE.name,
+                     pointsWasted: 0,
+                     skills: {
                         [MOCKED_SKILL.id]: {
-                            id: MOCKED_SKILL.id,
-                            status: SkillStatusEnum.NULL,
-                            pointsToAccess: MOCKED_SKILL.pointsToAccess,
-                            name: MOCKED_SKILL.name,
-                            description: MOCKED_SKILL.description,
-                            price: MOCKED_SKILL.price,
+                           id: MOCKED_SKILL.id,
+                           status: SkillStatusEnum.NULL,
+                           tier: MOCKED_SKILL.tier,
+                           name: MOCKED_SKILL.name,
+                           description: MOCKED_SKILL.description,
+                           price: MOCKED_SKILL.price,
                         },
-                    }
+                     }
                 }
             }
         },
@@ -71,17 +71,17 @@ export const MOCKED_ROOT_SERIALIZED: IRootSerialized = {
             name: MOCKED_TREE_2.name,
             subtrees: {
                 [MOCKED_SUBTREE_2.id]: {
-                    id: MOCKED_SUBTREE_2.id,
-                    name: MOCKED_SUBTREE_2.name,
-                    pointsWasted: 0,
-                    skills: {
+                     id: MOCKED_SUBTREE_2.id,
+                     name: MOCKED_SUBTREE_2.name,
+                     pointsWasted: 0,
+                     skills: {
                         [MOCKED_SKILL_2.id]: {
-                            id: MOCKED_SKILL_2.id,
-                            status: SkillStatusEnum.NULL,
-                            pointsToAccess: MOCKED_SKILL_2.pointsToAccess,
-                            name: MOCKED_SKILL_2.name,
-                            description: MOCKED_SKILL_2.description,
-                            price: MOCKED_SKILL_2.price,
+                           id: MOCKED_SKILL_2.id,
+                           status: SkillStatusEnum.NULL,
+                           tier: MOCKED_SKILL_2.tier,
+                           name: MOCKED_SKILL_2.name,
+                           description: MOCKED_SKILL_2.description,
+                           price: MOCKED_SKILL_2.price,
                         },
                     }
                 }

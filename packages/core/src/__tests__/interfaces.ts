@@ -1,9 +1,10 @@
 export interface IMockedSkill {
-    id: string,
-    name: string,
-    price: [number, number],
-    description: [string, string],
-    pointsToAccess: [number, number],
+   id: string,
+   name: string,
+   price: [number, number],
+   description: [string, string],
+   tier: number,
+   pointsToAccess: [number, number],
 }
 
 export interface IMockedSubtree {

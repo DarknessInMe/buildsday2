@@ -68,17 +68,17 @@ describe('Testing serializing', () => {
             name: MOCKED_TREE.name,
             subtrees: {
                 [MOCKED_SUBTREE.id]: {
-                    id: MOCKED_SUBTREE.id,
-                    name: MOCKED_SUBTREE.name,
-                    pointsWasted: 0,
-                    skills: {
+                     id: MOCKED_SUBTREE.id,
+                     name: MOCKED_SUBTREE.name,
+                     pointsWasted: 0,
+                     skills: {
                         [MOCKED_SKILL.id]: {
-                            id: MOCKED_SKILL.id,
-                            status: SkillStatusEnum.NULL,
-                            pointsToAccess: MOCKED_SKILL.pointsToAccess,
-                            name: MOCKED_SKILL.name,
-                            description: MOCKED_SKILL.description,
-                            price: MOCKED_SKILL.price,
+                           id: MOCKED_SKILL.id,
+                           status: SkillStatusEnum.NULL,
+                           tier: MOCKED_SKILL.tier,
+                           name: MOCKED_SKILL.name,
+                           description: MOCKED_SKILL.description,
+                           price: MOCKED_SKILL.price,
                         },
                     }
                 }

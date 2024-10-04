@@ -1,4 +1,4 @@
-import { expect, test, describe, beforeEach } from 'vitest'
+import { vi, expect, test, describe, beforeEach } from 'vitest'
 import { BasicSubtree } from './BasicSubtree';
 import { ISubtree, ISubtreeSerialized } from './interfaces';
 import { 
@@ -16,8 +16,10 @@ const MOCKED_SKILL_2: IMockedSkill = {
     name: 'Testing Skill 2',
 };
 
-const MOCKED_CONTEXT: IGlobalContext = {
-   getIsInfamyBonusActive: () => true,
+const createMockedContext = (isInfamyBonus: boolean = false): IGlobalContext => {
+   return {
+      getIsInfamyBonusActive: vi.fn(() => isInfamyBonus),
+   }
 }
 
 let subtree: ISubtree;
@@ -113,18 +115,20 @@ describe('Testing skills purchasing', () => {
             pointsToAccess: [2, 3],
         };
 
-        const cheapSkill = addSkill(subtree, CHEAP_SKILL).setContext(MOCKED_CONTEXT);
-        const expensiveSkill = addSkill(subtree, EXPENSIVE_SKILL).setContext(MOCKED_CONTEXT);
+        const cheapSkill = addSkill(subtree, CHEAP_SKILL).setContext(createMockedContext());
+        const expensiveSkill = addSkill(subtree, EXPENSIVE_SKILL).setContext(createMockedContext());
         
+        // Get 2 wasted points for subtree (common and aced version of cheapSkill costs 1 point)
         cheapSkill.buySkill();
         cheapSkill.buySkill();
-    
+        
         expensiveSkill.buySkill();
 
         // Expensive skill requires 3 points without infamy bonus. Currently, 
         // only 2 skill points were gained by subtree. Expensive must not be bought
         expect(expensiveSkill.getStatus()).toBe(SkillStatusEnum.NULL);
 
+        expensiveSkill.setContext(createMockedContext(true))
         expensiveSkill.buySkill();
 
         // Now, expensive skill has been bought with infamy bonus, which requires 2 points to access.
@@ -145,7 +149,7 @@ describe('Testing serializing', () => {
                 [MOCKED_SKILL.id]: {
                     id: MOCKED_SKILL.id,
                     status: SkillStatusEnum.NULL,
-                    pointsToAccess: MOCKED_SKILL.pointsToAccess,
+                    tier: MOCKED_SKILL.tier,
                     name: MOCKED_SKILL.name,
                     description: MOCKED_SKILL.description,
                     price: MOCKED_SKILL.price,
@@ -153,7 +157,7 @@ describe('Testing serializing', () => {
                 [MOCKED_SKILL_2.id]: {
                     id: MOCKED_SKILL_2.id,
                     status: SkillStatusEnum.NULL,
-                    pointsToAccess: MOCKED_SKILL_2.pointsToAccess,
+                    tier: MOCKED_SKILL_2.tier,
                     name: MOCKED_SKILL_2.name,
                     description: MOCKED_SKILL_2.description,
                     price: MOCKED_SKILL_2.price,

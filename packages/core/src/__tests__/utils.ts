@@ -5,6 +5,7 @@ export const addSkill = (subtree: ISubtree, mock: IMockedSkill) => {
     return subtree.addSkill(
         mock.id,
         mock.name,
+        mock.tier,
         mock.price,
         mock.description,
         mock.pointsToAccess,
