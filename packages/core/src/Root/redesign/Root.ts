@@ -1,11 +1,9 @@
 import { ITree } from 'src/Tree/redesign';
 import { IModifier } from './interfaces';
-import { MainStructure } from 'src/Structure';
+import { IMainStructure } from 'src/Structure';
 
 export class Root {
-	private structure = new MainStructure();
-
-	constructor(private modifier: IModifier) {}
+	constructor(protected structure: IMainStructure, protected modifier: IModifier) {}
 
 	public addTree(tree: ITree) {
 		this.structure.addTree(tree);

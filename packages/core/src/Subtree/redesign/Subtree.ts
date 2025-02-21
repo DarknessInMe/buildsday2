@@ -2,6 +2,7 @@ import { AbstractStructure } from 'src/Structure';
 import { ISubtree } from './interfaces';
 import { ISkill } from 'src/Skill/redesign';
 import { ITree } from 'src/Tree/redesign';
+import { IModifier } from 'src/Root/redesign';
 
 export class Subtree extends AbstractStructure implements ISubtree {
 	public children = new Map<string, ISkill>();
@@ -11,6 +12,7 @@ export class Subtree extends AbstractStructure implements ISubtree {
 		public readonly id: string,
 		public readonly name: string,
 		private investedPoints: number = 0,
+		protected modifier: IModifier,
 	) {
 		super();
 	}
@@ -35,10 +37,8 @@ export class Subtree extends AbstractStructure implements ISubtree {
 		return this;
 	}
 
-	public buy(skillId: string) {
-		const skill = this.query(skillId) as ISkill;
-
-		if (!skill || skill.getUnlockPoints() > this.investedPoints) {
+	public buy(skill: ISkill) {
+		if (!this.children.has(skill.id) || skill.getUnlockPoints() > this.investedPoints) {
 			return false;
 		}
 
@@ -51,10 +51,8 @@ export class Subtree extends AbstractStructure implements ISubtree {
 		return isSuccess;
 	}
 
-	public remove(skillId: string) {
-		const skill = this.query(skillId) as ISkill;
-
-		if (!skill) {
+	public remove(skill: ISkill) {
+		if (!this.children.has(skill.id)) {
 			return false;
 		}
 

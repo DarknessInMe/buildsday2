@@ -6,6 +6,6 @@ export interface ISubtree extends IStructuredEntity {
 	addSkill: (skill: ISkill) => ISubtree;
 	getInvestedPoints: () => number;
 	setInvestedPoints: (points: number) => ISubtree;
-	buy: (skillId: string) => boolean;
-	remove: (skillId: string) => boolean;
+	buy: (skill: ISkill) => boolean;
+	remove: (skill: ISkill) => boolean;
 }

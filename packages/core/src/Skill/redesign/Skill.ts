@@ -17,7 +17,7 @@ export class Skill extends AbstractStructure implements ISkill {
 		public readonly tier: number,
 		private readonly price: SkillPriceType,
 		private readonly unlockPoints: SkillPointsToAccessType,
-		private modifier: IModifier,
+		protected modifier: IModifier,
 	) {
 		super();
 	}
