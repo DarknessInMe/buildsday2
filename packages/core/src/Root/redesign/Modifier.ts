@@ -11,7 +11,7 @@ export class Modifier implements IModifier {
 		return this.isActivePointsDiscount;
 	}
 
-	public getRequiredSkillPrice(price: [number, number]) {
-		return this.isActivePointsDiscount ? price[0] : price[1];
+	public getUnlockPoints(pointsToAccess: [number, number]) {
+		return this.isActivePointsDiscount ? pointsToAccess[0] : pointsToAccess[1];
 	}
 }

@@ -1,5 +1,5 @@
 export interface IModifier {
-	getRequiredSkillPrice: (price: [number, number]) => number;
+	getUnlockPoints: (unlockPoints: [number, number]) => number;
 }
 
 export interface ISerializer {}
