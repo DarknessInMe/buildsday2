@@ -10,18 +10,25 @@ export abstract class AbstractStructure implements IStructuredEntity {
 			return null;
 		}
 
-		return Array.from(this.children.entries()).find(([entityId, entity]) => {
-			if (entityId === id) {
+		return Array.from(this.children.values()).find((entity) => {
+			if (entity.id === id) {
 				return entity;
 			}
 
 			return entity.query(id);
-		})[1];
+		});
 	}
 
 	public setParent(parent: IStructuredEntity) {
 		this.parent = parent;
 
+		return this;
+	}
+
+	public addChild(child: IStructuredEntity) {
+		if (this.children) {
+			this.children.set(child.id, child);
+		}
 		return this;
 	}
 }

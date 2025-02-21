@@ -6,7 +6,7 @@ export class Root {
 	constructor(protected structure: IMainStructure, protected modifier: IModifier) {}
 
 	public addTree(tree: ITree) {
-		this.structure.addTree(tree);
+		this.structure.addChild(tree);
 
 		return this;
 	}

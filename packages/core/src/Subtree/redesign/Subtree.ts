@@ -1,4 +1,4 @@
-import { AbstractStructure } from 'src/Structure';
+import { AbstractStructure, IStructuredEntity } from 'src/Structure';
 import { ISubtree } from './interfaces';
 import { ISkill } from 'src/Skill/redesign';
 import { ITree } from 'src/Tree/redesign';
@@ -17,9 +17,8 @@ export class Subtree extends AbstractStructure implements ISubtree {
 		super();
 	}
 
-	public addSkill(skill: ISkill) {
-		this.children.set(skill.id, skill);
-		return this;
+	public addChild(skill: ISkill) {
+		return super.addChild(skill);
 	}
 
 	public setParent(parent: ITree) {

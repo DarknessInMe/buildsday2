@@ -16,9 +16,8 @@ export class Tree extends AbstractStructure implements ITree {
 		super();
 	}
 
-	public addSubtree(subtree: ISubtree) {
-		this.children.set(subtree.id, subtree);
-		return this;
+	public addChild(skill: ISubtree) {
+		return super.addChild(skill);
 	}
 
 	public buy(skill: ISkill) {

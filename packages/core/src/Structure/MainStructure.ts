@@ -14,10 +14,8 @@ export class MainStructure extends AbstractStructure implements IMainStructure {
 		super();
 	}
 
-	public addTree(tree: ITree) {
-		this.children.set(tree.id, tree);
-
-		return this;
+	public addChild(tree: ITree) {
+		return super.addChild(tree);
 	}
 
 	public getTotalPoints() {
@@ -60,7 +58,7 @@ export class MainStructure extends AbstractStructure implements IMainStructure {
 		}
 	}
 
-	public remove(skillId) {
+	public remove(skillId: string) {
 		const [skill, tree] = this.preparePurchaseData(skillId);
 
 		if (!skill || !tree) {
