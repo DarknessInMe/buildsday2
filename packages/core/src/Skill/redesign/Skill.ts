@@ -37,6 +37,34 @@ export class Skill extends AbstractStructure implements ISkill {
 		return this;
 	}
 
+	public getHigherStatus() {
+		switch (this.status) {
+			case SkillStatusEnum.BASIC: {
+				return SkillStatusEnum.ACED;
+			}
+			case null: {
+				return SkillStatusEnum.BASIC;
+			}
+			default: {
+				return null;
+			}
+		}
+	}
+
+	public getLowerStatus() {
+		switch (this.status) {
+			case SkillStatusEnum.ACED: {
+				return SkillStatusEnum.BASIC;
+			}
+			case SkillStatusEnum.BASIC: {
+				return null;
+			}
+			default: {
+				return null;
+			}
+		}
+	}
+
 	public getUnlockPoints() {
 		return this.modifier.getUnlockPoints(this.unlockPoints);
 	}

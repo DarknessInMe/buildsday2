@@ -10,6 +10,8 @@ export interface ISkill extends IStructuredEntity {
 	setStatus: (status: SkillStatusEnum | null) => ISkill;
 	getUnlockPoints: () => number;
 	getPrice: (status: SkillStatusEnum | null) => number;
+	getHigherStatus: () => SkillStatusEnum | null;
+	getLowerStatus: () => SkillStatusEnum | null;
 	buy: () => boolean;
 	remove: () => boolean;
 }
