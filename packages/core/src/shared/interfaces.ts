@@ -18,10 +18,3 @@ export interface IComponentWithParent {
 	parent: IEntityParent | null;
 	setParent: (parent: IEntityParent | null) => this;
 }
-
-export interface IStructuredEntity {
-	children: Map<string, IStructuredEntity> | null;
-	parent: IStructuredEntity | null;
-	query: (id: string) => IStructuredEntity | null;
-	id: string;
-}

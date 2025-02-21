@@ -1,6 +1,7 @@
-import { IStructuredEntity } from 'src/shared/interfaces';
+import { IStructuredEntity } from 'src/Structure';
+import { ISubtree } from 'src/Subtree/redesign';
 
 export interface ITree extends IStructuredEntity {
 	name: string;
-	addSubtree: (subtree: any) => any;
+	addSubtree: (subtree: ISubtree) => ITree;
 }

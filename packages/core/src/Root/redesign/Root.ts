@@ -1,6 +1,6 @@
 import { ITree } from 'src/Tree/redesign';
 import { IModifier } from './interfaces';
-import { MainStructure } from './Structure';
+import { MainStructure } from 'src/Structure';
 
 export class Root {
 	private structure = new MainStructure();
