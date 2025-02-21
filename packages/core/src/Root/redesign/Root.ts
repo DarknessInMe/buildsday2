@@ -10,4 +10,24 @@ export class Root {
 
 		return this;
 	}
+
+	public getPoints() {
+		return this.structure.getTotalPoints();
+	}
+
+	public toggleDiscountStatus() {
+		return this.modifier.setDiscountStatus(!this.modifier.getDiscountStatus());
+	}
+
+	public getDiscountStatus() {
+		return this.modifier.getDiscountStatus();
+	}
+
+	public buySkill(id: string) {
+		return this.structure.buy(id);
+	}
+
+	public removeSkill(id: string) {
+		return this.structure.remove(id);
+	}
 }
