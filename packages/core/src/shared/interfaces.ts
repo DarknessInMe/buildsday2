@@ -18,3 +18,7 @@ export interface IComponentWithParent {
 	parent: IEntityParent | null;
 	setParent: (parent: IEntityParent | null) => this;
 }
+
+export interface ISerializableEntity<T> {
+	serialize: () => T;
+}

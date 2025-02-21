@@ -1,7 +1,14 @@
 import { IStructuredEntity } from 'src/Structure';
-import { ISkill } from 'src/Skill/redesign';
+import { ISkill, ISkillSerialized } from 'src/Skill/redesign';
+import { ISerializableEntity } from 'src/shared/interfaces';
 
-export interface ISubtree extends IStructuredEntity {
+export interface ISubtreeSerialized {
+	id: string;
+	points: number;
+	skills: ISkillSerialized[];
+}
+
+export interface ISubtree extends IStructuredEntity, ISerializableEntity<ISubtreeSerialized> {
 	name: string;
 	getInvestedPoints: () => number;
 	setInvestedPoints: (points: number) => ISubtree;

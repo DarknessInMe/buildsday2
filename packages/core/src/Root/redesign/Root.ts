@@ -11,6 +11,10 @@ export class Root {
 		return this;
 	}
 
+	public serialize() {
+		return this.structure.serialize();
+	}
+
 	public getPoints() {
 		return this.structure.getTotalPoints();
 	}

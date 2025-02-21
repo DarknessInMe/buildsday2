@@ -3,5 +3,3 @@ export interface IModifier {
 	getDiscountStatus: () => boolean;
 	setDiscountStatus: (status: boolean) => void;
 }
-
-export interface ISerializer {}

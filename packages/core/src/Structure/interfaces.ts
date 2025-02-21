@@ -1,4 +1,5 @@
-import { ITree } from 'src/Tree/redesign';
+import { ISerializableEntity } from 'src/shared/interfaces';
+import { ITree, ITreeSerialized } from 'src/Tree/redesign';
 
 export interface IStructuredEntity {
 	children: Map<string, IStructuredEntity> | null;
@@ -9,7 +10,14 @@ export interface IStructuredEntity {
 	id: string;
 }
 
-export interface IMainStructure extends IStructuredEntity {
+export interface IStructureSerialized {
+	points: number;
+	trees: ITreeSerialized[];
+}
+
+export interface IMainStructure
+	extends IStructuredEntity,
+		ISerializableEntity<IStructureSerialized> {
 	getTotalPoints: () => number;
 	setTotalPoints: (points: number) => IMainStructure;
 	buy: (skillId: string) => void;

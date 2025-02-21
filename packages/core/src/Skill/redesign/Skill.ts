@@ -1,5 +1,5 @@
 import { AbstractStructure, IStructuredEntity } from 'src/Structure';
-import { ISkill } from './interfaces';
+import { ISkill, ISkillSerialized } from './interfaces';
 import { ISubtree } from 'src/Subtree/redesign';
 import { SkillDescriptionType, SkillPointsToAccessType, SkillPriceType } from '../types';
 import { SkillStatusEnum } from '../enums';
@@ -20,6 +20,13 @@ export class Skill extends AbstractStructure implements ISkill {
 		protected modifier: IModifier,
 	) {
 		super();
+	}
+
+	public serialize() {
+		return {
+			id: this.id,
+			status: this.getStatus(),
+		};
 	}
 
 	public setParent(parent: ISubtree) {

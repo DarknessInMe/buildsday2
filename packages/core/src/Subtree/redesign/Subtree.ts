@@ -1,6 +1,6 @@
 import { AbstractStructure, IStructuredEntity } from 'src/Structure';
-import { ISubtree } from './interfaces';
-import { ISkill } from 'src/Skill/redesign';
+import { ISubtree, ISubtreeSerialized } from './interfaces';
+import { ISkill, ISkillSerialized } from 'src/Skill/redesign';
 import { ITree } from 'src/Tree/redesign';
 import { IModifier } from 'src/Root/redesign';
 
@@ -15,6 +15,20 @@ export class Subtree extends AbstractStructure implements ISubtree {
 		protected modifier: IModifier,
 	) {
 		super();
+	}
+
+	public serialize() {
+		return {
+			id: this.id,
+			points: this.getInvestedPoints(),
+			skills: [...this.children.values()].reduce<ISkillSerialized[]>((acc, skill) => {
+				if (skill.getStatus() === null) {
+					return acc;
+				}
+
+				return [...acc, skill.serialize()];
+			}, []),
+		};
 	}
 
 	public addChild(skill: ISkill) {

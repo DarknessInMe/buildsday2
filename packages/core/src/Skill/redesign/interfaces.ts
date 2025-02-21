@@ -1,8 +1,14 @@
 import { IStructuredEntity } from 'src/Structure';
 import { SkillDescriptionType, SkillPointsToAccessType, SkillPriceType } from '../types';
 import { SkillStatusEnum } from '../enums';
+import { ISerializableEntity } from 'src/shared/interfaces';
 
-export interface ISkill extends IStructuredEntity {
+export interface ISkillSerialized {
+	id: string;
+	status: SkillStatusEnum;
+}
+
+export interface ISkill extends IStructuredEntity, ISerializableEntity<ISkillSerialized> {
 	name: string;
 	tier: number;
 	description: SkillDescriptionType;

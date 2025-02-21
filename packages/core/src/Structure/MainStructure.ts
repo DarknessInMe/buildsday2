@@ -1,5 +1,5 @@
-import { IMainStructure } from './interfaces';
-import { ITree } from 'src/Tree/redesign';
+import { IMainStructure, IStructureSerialized } from './interfaces';
+import { ITree, ITreeSerialized } from 'src/Tree/redesign';
 import { AbstractStructure } from './abstract';
 import { IModifier } from 'src/Root/redesign';
 import { ISkill } from 'src/Skill/redesign';
@@ -12,6 +12,21 @@ export class MainStructure extends AbstractStructure implements IMainStructure {
 
 	constructor(private totalPoints: number, protected modifier: IModifier) {
 		super();
+	}
+
+	public serialize() {
+		return {
+			points: this.getTotalPoints(),
+			trees: [...this.children.values()].reduce<ITreeSerialized[]>((acc, tree) => {
+				const serializedTree = tree.serialize();
+
+				if (!serializedTree.subtrees.length) {
+					return acc;
+				}
+
+				return [...acc, serializedTree];
+			}, []),
+		};
 	}
 
 	public addChild(tree: ITree) {
