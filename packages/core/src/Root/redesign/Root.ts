@@ -11,6 +11,10 @@ export class Root {
 		return this;
 	}
 
+	public getTrees() {
+		return this.structure.children;
+	}
+
 	public serialize() {
 		return this.structure.serialize();
 	}
