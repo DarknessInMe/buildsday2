@@ -1,129 +1,45 @@
-import { ITree, ITreeSerialized } from '../Tree';
-import { INITIAL_POINTS_COUNT } from '../shared/constants';
-import { ISkill } from '../Skill';
-import { ISubtree } from '../Subtree';
-import { PubSub, Changes, SubscriberType } from './PubSub';
-import { IRootSerialized } from './interfaces';
-import { IEntityParent } from '../shared/interfaces';
-import { Context } from './Context';
+import { ITree } from 'src/Tree';
+import { IModifier } from './interfaces';
+import { IMainStructure, IStructureSerialized } from 'src/Structure';
 
-export class Root implements IEntityParent {
-   public trees: Map<string, ITree> = new Map();
-   public isInfamyBonus: boolean = false;
-   private pubSub = new PubSub();
-   private context = new Context(this);
+export class Root {
+	constructor(protected structure: IMainStructure, protected modifier: IModifier) {}
 
-   constructor(
-      public points: number = INITIAL_POINTS_COUNT,
-   ) {}
+	public addTree(tree: ITree) {
+		this.structure.addChild(tree);
 
-   private operatePoints(acc: number) {
-      this.points += acc;
-   }
+		return this;
+	}
 
-   public setTree(tree: ITree) {
-      this.trees.set(tree.id, tree
-         .setParent(this)
-         .setContext(this.context)
-      );
+	public getTrees() {
+		return this.structure.children;
+	}
 
-      return this;
-   }
+	public serialize() {
+		return this.structure.serialize();
+	}
 
-   public toggleInfamyBonus(infamyState: boolean) {
-      this.isInfamyBonus = infamyState;
-      this.notifySubscribers()
-   }
+	public deserialize(deserialized: IStructureSerialized) {
+		return this.structure.deserialize(deserialized);
+	}
 
-   public serialize(): IRootSerialized {
-      const trees = {} as Record<string, ITreeSerialized>;
+	public getPoints() {
+		return this.structure.getTotalPoints();
+	}
 
-      this.trees.forEach((tree, id) => {
-         trees[id] = tree.serialize();
-      })
+	public toggleDiscountStatus() {
+		return this.modifier.setDiscountStatus(!this.modifier.getDiscountStatus());
+	}
 
-      return {
-         points: this.points,
-         isInfamyBonus: this.isInfamyBonus,
-         trees,
-      }
-   }
+	public getDiscountStatus() {
+		return this.modifier.getDiscountStatus();
+	}
 
-   public onChange(callback: SubscriberType) {
-      return this.pubSub.onChange(callback);
-   }
+	public buySkill(id: string) {
+		return this.structure.buy(id);
+	}
 
-   public verifySkillPurchase(price: number) {
-      return this.points - price >= 0;
-   }
-
-   public verifySkillDeletion() {
-      return true;
-   };
-
-   public onBuySkill(price: number) {
-      this.operatePoints(price * -1);
-   }
-
-   public onRemoveSkill(price: number) {
-      this.operatePoints(price);
-   }
-
-   public notifySubscribers(
-      skill: ISkill | null = null, 
-      subtree: ISubtree | null = null,
-      treeId: string | null = null,
-   ) {
-      this.pubSub.notifySubscribers(new Changes(
-         this.points,
-         this.isInfamyBonus,
-         treeId,
-         skill,
-         subtree,
-      ))
-   }
-
-   public query(skillId: string) {
-      const treeIterator = this.trees[Symbol.iterator]();
-
-      for (const [, treeEntity] of treeIterator) {
-         const result = treeEntity.query(skillId);
-
-         if (result) {
-               return result
-         }
-      }
-
-      return null;
-   }
-
-   public buySkill(skillId: string) {
-      const result = this.query(skillId);
-
-      if (!result) {
-         return;
-      }
-
-      const { skill, subtree, tree } = result;
-      const points = skill.buySkill();
-
-      if (typeof points === 'number') {
-         this.notifySubscribers(skill, subtree, tree.id);
-      }
-   }
-
-   public removeSkill(skillId: string) {
-      const result = this.query(skillId);
-
-      if (!result) {
-         return;
-      }
-
-      const { skill, subtree, tree } = result;
-      const points = skill.removeSkill();
-
-      if (typeof points === 'number') {
-         this.notifySubscribers(skill, subtree, tree.id);
-      }
-   }
+	public removeSkill(id: string) {
+		return this.structure.remove(id);
+	}
 }

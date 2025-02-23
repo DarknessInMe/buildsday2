@@ -1,2 +1,3 @@
-export * from './Root';
 export * from './interfaces';
+export * from './Modifier';
+export * from './Root';

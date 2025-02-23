@@ -1,2 +1,2 @@
-export * from './BasicTree';
+export * from './Tree';
 export * from './interfaces';

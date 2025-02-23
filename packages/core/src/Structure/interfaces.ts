@@ -1,5 +1,5 @@
 import { ISerializableEntity } from 'src/shared/interfaces';
-import { ITree, ITreeSerialized } from 'src/Tree/redesign';
+import { ITree, ITreeSerialized } from 'src/Tree';
 
 export interface IStructuredEntity {
 	children: Map<string, IStructuredEntity> | null;

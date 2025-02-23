@@ -1,8 +1,8 @@
-import { AbstractStructure, IStructuredEntity } from 'src/Structure';
+import { AbstractStructure } from 'src/Structure';
 import { ISubtree, ISubtreeSerialized } from './interfaces';
-import { ISkill, ISkillSerialized } from 'src/Skill/redesign';
-import { ITree } from 'src/Tree/redesign';
-import { IModifier } from 'src/Root/redesign';
+import { ISkill, ISkillSerialized } from 'src/Skill';
+import { ITree } from 'src/Tree';
+import { IModifier } from 'src/Root';
 
 export class Subtree extends AbstractStructure implements ISubtree {
 	public children = new Map<string, ISkill>();

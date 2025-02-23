@@ -1,28 +1,15 @@
-import { ISubtree, ISubtreeSerialized } from '../Subtree';
-import { ISkill } from '../Skill';
-import { 
-   IEntityParent, 
-   IComponentWithContext,
-   IComponentWithParent,
-} from '../shared/interfaces';
-
-export interface ITree extends IEntityParent, IComponentWithContext, IComponentWithParent {
-   subtrees: Map<string, ISubtree>,
-   id: string,
-   name: string,
-   query: (skillId: string) => ITreeQueryPayload | null,
-   addSubtree: (subtree: ISubtree) => ISubtree,
-   serialize: () => ITreeSerialized,
-};
+import { ISerializableEntity } from 'src/shared/interfaces';
+import { ISkill } from 'src/Skill';
+import { IStructuredEntity } from 'src/Structure';
+import { ISubtreeSerialized } from 'src/Subtree';
 
 export interface ITreeSerialized {
-    id: string,
-    name: string,
-    subtrees: Record<string, ISubtreeSerialized>
-};
+	id: string;
+	subtrees: ISubtreeSerialized[];
+}
 
-export interface ITreeQueryPayload {
-    skill: ISkill,
-    subtree: ISubtree,
-    tree: ITree,
-};
+export interface ITree extends IStructuredEntity, ISerializableEntity<ITreeSerialized> {
+	name: string;
+	buy: (skill: ISkill) => boolean;
+	remove: (skill: ISkill) => boolean;
+}

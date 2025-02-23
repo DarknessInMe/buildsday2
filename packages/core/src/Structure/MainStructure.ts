@@ -1,9 +1,9 @@
 import { IMainStructure, IStructureSerialized } from './interfaces';
-import { ITree, ITreeSerialized } from 'src/Tree/redesign';
+import { ITree, ITreeSerialized } from 'src/Tree';
 import { AbstractStructure } from './abstract';
-import { IModifier } from 'src/Root/redesign';
-import { ISkill } from 'src/Skill/redesign';
-import { ISubtree } from 'src/Subtree/redesign';
+import { IModifier } from 'src/Root';
+import { ISkill } from 'src/Skill';
+import { ISubtree } from 'src/Subtree';
 
 export class MainStructure extends AbstractStructure implements IMainStructure {
 	public parent = null;

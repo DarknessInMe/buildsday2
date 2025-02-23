@@ -1,120 +1,115 @@
-import { ISkill, ISkillSerialized } from './interfaces';
-import { SkillPriceType, SkillDescriptionType, SkillPointsToAccessType } from './types';
-import { SkillStatusEnum } from './enums';
-import { IEntityParent, IGlobalContext } from '../shared/interfaces';
-import type { Connection } from './Connection';
+import { AbstractStructure } from 'src/Structure';
+import { ISubtree } from 'src/Subtree';
+import {
+	SkillDescriptionType,
+	SkillPointsToAccessType,
+	SkillPriceType,
+	ISkill,
+	ISkillSerialized,
+} from './interfaces';
+import { SkillStatusEnum } from './constants';
+import { IModifier } from 'src/Root';
 
-const STATUS_WEIGHT_MAP = {
-   [SkillStatusEnum.NULL]: -1,
-   [SkillStatusEnum.BASIC]: 0,
-   [SkillStatusEnum.ACED]: 1,
-};
+export class Skill extends AbstractStructure implements ISkill {
+	public children = null;
+	public parent: ISubtree | null = null;
+	private status: SkillStatusEnum | null = null;
 
-export class Skill implements ISkill {
-   private status: SkillStatusEnum = SkillStatusEnum.NULL;
-   public parent: IEntityParent | null = null;
-   public context: IGlobalContext | null = null;
+	constructor(
+		public readonly id: string,
+		public readonly name: string,
+		public readonly description: SkillDescriptionType,
+		public readonly tier: number,
+		private readonly price: SkillPriceType,
+		private readonly unlockPoints: SkillPointsToAccessType,
+		protected modifier: IModifier,
+	) {
+		super();
+	}
 
-   constructor(
-      public id: string,
-      public name: string,
-      public price: SkillPriceType,
-      public description: SkillDescriptionType,
-      protected connection: Connection,
-   ) {}
+	public serialize() {
+		return {
+			id: this.id,
+			status: this.getStatus(),
+			tier: this.tier,
+		};
+	}
 
-   public setParent(parent: IEntityParent | null) {
-      this.parent = parent;
-      return this;
-   }
+	public deserialize(entity: ISkillSerialized) {
+		this.setStatus(entity.status);
+	}
 
-   public setContext(context: IGlobalContext | null) {
-      this.context = context;
-      return this;
-   };
+	public setParent(parent: ISubtree) {
+		super.setParent(parent);
 
-   public serialize(): ISkillSerialized {
-      return {
-         id: this.id,
-         status: this.getStatus(),
-         name: this.name,
-         description: this.description,
-         price: this.price,
-         tier: this.connection.getTier(),
-      }
-   }
+		return this;
+	}
 
-   public getStatus() {
-      return this.status;
-   }
+	public getStatus() {
+		return this.status;
+	}
 
-   public getTier() {
-      return this.connection.getTier();
-   }
+	public setStatus(status: SkillStatusEnum | null) {
+		this.status = status;
+		return this;
+	}
 
-   public getPointsToAccess() {
-      const isInfamyBonus = this.context?.getIsInfamyBonusActive?.() ?? false;
+	public getHigherStatus() {
+		switch (this.status) {
+			case SkillStatusEnum.BASIC: {
+				return SkillStatusEnum.ACED;
+			}
+			case null: {
+				return SkillStatusEnum.BASIC;
+			}
+			default: {
+				return null;
+			}
+		}
+	}
 
-      return this.connection.getPointsToAccess(isInfamyBonus);
-   }
+	public getLowerStatus() {
+		switch (this.status) {
+			case SkillStatusEnum.ACED: {
+				return SkillStatusEnum.BASIC;
+			}
+			case SkillStatusEnum.BASIC: {
+				return null;
+			}
+			default: {
+				return null;
+			}
+		}
+	}
 
-   public getPriceByStatus(status: SkillStatusEnum) {
-      if (status === SkillStatusEnum.NULL) {
-         return 0;
-      };
+	public getUnlockPoints() {
+		return this.modifier.getUnlockPoints(this.unlockPoints);
+	}
 
-      return this.price[SkillStatusEnum.BASIC === status ? 0 : 1];
-   }
+	public getPrice(status: SkillStatusEnum | null) {
+		if (!status) {
+			return null;
+		}
 
-   private getStatusByWeight(weight: number): SkillStatusEnum {
-      for (const statusKey in STATUS_WEIGHT_MAP) {
-         if (STATUS_WEIGHT_MAP[statusKey] === weight) {
-               return statusKey as SkillStatusEnum;
-         }
-      }
-      console.error(`Could not get Skill status by weight for ${this.id}`);
-      return SkillStatusEnum.NULL;
-   }
+		return status === SkillStatusEnum.BASIC ? this.price[0] : this.price[1];
+	}
 
-   public buySkill() {
-      if (this.status === SkillStatusEnum.ACED) {
-         console.error('Unexpected error happened. Cannot buy already aced skill')
-         return null;
-      }
+	public buy() {
+		if (this.status === SkillStatusEnum.ACED) {
+			return false;
+		}
+		this.setStatus(this.status === null ? SkillStatusEnum.BASIC : SkillStatusEnum.ACED);
 
-      const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] + 1);
-      const skillPrice = this.getPriceByStatus(newStatus)
+		return true;
+	}
 
-      if (this.parent && !this.parent.verifySkillPurchase(skillPrice, this.getPointsToAccess())) {
-         return null;
-      }
+	public remove() {
+		if (this.status === null) {
+			return false;
+		}
 
-      this.status = newStatus;
-      this.parent?.onBuySkill?.(skillPrice);
+		this.setStatus(this.status === SkillStatusEnum.ACED ? SkillStatusEnum.BASIC : null);
 
-      return skillPrice;
-   }
-
-   public removeSkill() {
-      if (this.status === SkillStatusEnum.NULL) {
-         console.error('Unexpected error happened. Cannot remove unbought skill')
-         return null;
-      }
-
-      const skillPrice = this.getPriceByStatus(this.status)
-      const newStatus = this.getStatusByWeight(STATUS_WEIGHT_MAP[this.status] - 1);
-
-      if (this.parent && !this.parent.verifySkillDeletion(
-         this.connection.getTier(),
-         skillPrice, 
-         this.id
-      )) {
-         return null;
-      }
-
-      this.status = newStatus;
-      this.parent?.onRemoveSkill?.(skillPrice);
-
-      return skillPrice;
-   }
+		return true;
+	}
 }
