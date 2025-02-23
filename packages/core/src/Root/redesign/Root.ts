@@ -1,6 +1,6 @@
 import { ITree } from 'src/Tree/redesign';
 import { IModifier } from './interfaces';
-import { IMainStructure } from 'src/Structure';
+import { IMainStructure, IStructureSerialized } from 'src/Structure';
 
 export class Root {
 	constructor(protected structure: IMainStructure, protected modifier: IModifier) {}
@@ -13,6 +13,10 @@ export class Root {
 
 	public serialize() {
 		return this.structure.serialize();
+	}
+
+	public deserialize(deserialized: IStructureSerialized) {
+		return this.structure.deserialize(deserialized);
 	}
 
 	public getPoints() {

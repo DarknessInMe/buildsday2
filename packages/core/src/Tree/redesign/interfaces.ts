@@ -4,6 +4,7 @@ import { IStructuredEntity } from 'src/Structure';
 import { ISubtreeSerialized } from 'src/Subtree/redesign';
 
 export interface ITreeSerialized {
+	id: string;
 	subtrees: ISubtreeSerialized[];
 }
 

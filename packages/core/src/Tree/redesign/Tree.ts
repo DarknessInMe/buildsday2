@@ -1,5 +1,5 @@
 import { AbstractStructure, IStructuredEntity } from 'src/Structure';
-import { ITree } from './interfaces';
+import { ITree, ITreeSerialized } from './interfaces';
 import { ISubtree, ISubtreeSerialized } from 'src/Subtree/redesign';
 import { ISkill } from 'src/Skill/redesign';
 import { IModifier } from 'src/Root/redesign';
@@ -18,6 +18,7 @@ export class Tree extends AbstractStructure implements ITree {
 
 	public serialize() {
 		return {
+			id: this.id,
 			subtrees: [...this.children.values()].reduce<ISubtreeSerialized[]>((acc, subtree) => {
 				const serializedSubtree = subtree.serialize();
 
@@ -28,6 +29,12 @@ export class Tree extends AbstractStructure implements ITree {
 				return [...acc, serializedSubtree];
 			}, []),
 		};
+	}
+
+	public deserialize(tree: ITreeSerialized) {
+		return tree.subtrees.forEach((model) => {
+			this.children.get(model.id)?.deserialize?.(model);
+		});
 	}
 
 	public addChild(skill: ISubtree) {

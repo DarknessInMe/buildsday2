@@ -26,7 +26,12 @@ export class Skill extends AbstractStructure implements ISkill {
 		return {
 			id: this.id,
 			status: this.getStatus(),
+			tier: this.tier,
 		};
+	}
+
+	public deserialize(entity: ISkillSerialized) {
+		this.setStatus(entity.status);
 	}
 
 	public setParent(parent: ISubtree) {

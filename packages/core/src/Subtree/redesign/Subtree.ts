@@ -31,6 +31,17 @@ export class Subtree extends AbstractStructure implements ISubtree {
 		};
 	}
 
+	public deserialize(entity: ISubtreeSerialized) {
+		const { points, skills } = entity;
+
+		this.setInvestedPoints(points);
+		skills
+			.sort((a, b) => a.tier - b.tier)
+			.forEach((skill) => {
+				this.children.get(skill.id)?.buy?.();
+			});
+	}
+
 	public addChild(skill: ISkill) {
 		return super.addChild(skill);
 	}

@@ -29,6 +29,13 @@ export class MainStructure extends AbstractStructure implements IMainStructure {
 		};
 	}
 
+	public deserialize(entity: IStructureSerialized) {
+		this.setTotalPoints(entity.points);
+		entity.trees.forEach((model) => {
+			this.children.get(model.id)?.deserialize?.(model);
+		});
+	}
+
 	public addChild(tree: ITree) {
 		return super.addChild(tree);
 	}

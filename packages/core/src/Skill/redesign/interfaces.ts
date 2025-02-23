@@ -6,6 +6,7 @@ import { ISerializableEntity } from 'src/shared/interfaces';
 export interface ISkillSerialized {
 	id: string;
 	status: SkillStatusEnum;
+	tier: number;
 }
 
 export interface ISkill extends IStructuredEntity, ISerializableEntity<ISkillSerialized> {
