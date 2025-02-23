@@ -12,13 +12,15 @@ export abstract class AbstractStructure<Parent, Children>
 			return null;
 		}
 
-		return ([...this.children.values()] as IStructuredEntity[]).find((entity) => {
-			if (entity.id === id) {
-				return entity as IStructuredEntity;
-			}
+		return (
+			([...this.children.values()] as IStructuredEntity[]).find((entity) => {
+				if (entity.id === id) {
+					return entity as IStructuredEntity;
+				}
 
-			return entity.query(id) as IStructuredEntity;
-		});
+				return entity.query(id) as IStructuredEntity;
+			}) ?? null
+		);
 	}
 
 	public setParent(parent: Parent) {

@@ -18,7 +18,7 @@ export interface ISkill
 	getStatus: () => SkillStatusEnum | null;
 	setStatus: (status: SkillStatusEnum | null) => ISkill;
 	getUnlockPoints: () => number;
-	getPrice: (status: SkillStatusEnum | null) => number;
+	getPrice: (status: SkillStatusEnum | null) => number | null;
 	getHigherStatus: () => SkillStatusEnum | null;
 	getLowerStatus: () => SkillStatusEnum | null;
 	buy: () => boolean;

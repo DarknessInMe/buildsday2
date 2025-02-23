@@ -36,10 +36,6 @@ export class MainStructure extends AbstractStructure<null, ITree> implements IMa
 		});
 	}
 
-	public addChild(tree: ITree) {
-		return super.addChild(tree);
-	}
-
 	public getTotalPoints() {
 		return this.totalPoints;
 	}
