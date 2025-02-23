@@ -1,6 +1,7 @@
 import { IStructuredEntity } from 'src/Structure';
 import { SkillStatusEnum } from './constants';
 import { ISerializableEntity } from 'src/shared/interfaces';
+import { ISubtree } from 'src/Subtree';
 
 export interface ISkillSerialized {
 	id: string;
@@ -8,7 +9,9 @@ export interface ISkillSerialized {
 	tier: number;
 }
 
-export interface ISkill extends IStructuredEntity, ISerializableEntity<ISkillSerialized> {
+export interface ISkill
+	extends IStructuredEntity<ISubtree, null>,
+		ISerializableEntity<ISkillSerialized> {
 	name: string;
 	tier: number;
 	description: SkillDescriptionType;

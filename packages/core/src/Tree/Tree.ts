@@ -1,12 +1,12 @@
-import { AbstractStructure, IStructuredEntity } from 'src/Structure';
+import { AbstractStructure, IMainStructure, IStructuredEntity } from 'src/Structure';
 import { ITree, ITreeSerialized } from './interfaces';
 import { ISubtree, ISubtreeSerialized } from 'src/Subtree';
 import { ISkill } from 'src/Skill';
 import { IModifier } from 'src/Root';
 
-export class Tree extends AbstractStructure implements ITree {
+export class Tree extends AbstractStructure<IMainStructure, ISubtree> implements ITree {
 	public children = new Map<string, ISubtree>();
-	public parent: IStructuredEntity | null = null;
+	public parent: IMainStructure | null = null;
 
 	constructor(
 		public readonly id: string,
@@ -35,10 +35,6 @@ export class Tree extends AbstractStructure implements ITree {
 		return tree.subtrees.forEach((model) => {
 			this.children.get(model.id)?.deserialize?.(model);
 		});
-	}
-
-	public addChild(skill: ISubtree) {
-		return super.addChild(skill);
 	}
 
 	public buy(skill: ISkill) {

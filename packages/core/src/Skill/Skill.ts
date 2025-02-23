@@ -10,7 +10,7 @@ import {
 import { SkillStatusEnum } from './constants';
 import { IModifier } from 'src/Root';
 
-export class Skill extends AbstractStructure implements ISkill {
+export class Skill extends AbstractStructure<ISubtree, null> implements ISkill {
 	public children = null;
 	public parent: ISubtree | null = null;
 	private status: SkillStatusEnum | null = null;
@@ -37,12 +37,6 @@ export class Skill extends AbstractStructure implements ISkill {
 
 	public deserialize(entity: ISkillSerialized) {
 		this.setStatus(entity.status);
-	}
-
-	public setParent(parent: ISubtree) {
-		super.setParent(parent);
-
-		return this;
 	}
 
 	public getStatus() {

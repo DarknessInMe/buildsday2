@@ -4,7 +4,7 @@ import { ISkill, ISkillSerialized } from 'src/Skill';
 import { ITree } from 'src/Tree';
 import { IModifier } from 'src/Root';
 
-export class Subtree extends AbstractStructure implements ISubtree {
+export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtree {
 	public children = new Map<string, ISkill>();
 	public parent: ITree | null = null;
 
@@ -40,16 +40,6 @@ export class Subtree extends AbstractStructure implements ISubtree {
 			.forEach((skill) => {
 				this.children.get(skill.id)?.buy?.();
 			});
-	}
-
-	public addChild(skill: ISkill) {
-		return super.addChild(skill);
-	}
-
-	public setParent(parent: ITree) {
-		super.setParent(parent);
-
-		return this;
 	}
 
 	public getInvestedPoints() {

@@ -1,11 +1,11 @@
 import { ISerializableEntity } from 'src/shared/interfaces';
 import { ITree, ITreeSerialized } from 'src/Tree';
 
-export interface IStructuredEntity {
-	children: Map<string, IStructuredEntity> | null;
-	addChild: (child: IStructuredEntity) => this;
-	parent: IStructuredEntity | null;
-	setParent: (parent: IStructuredEntity) => IStructuredEntity;
+export interface IStructuredEntity<Parent = unknown, Children = unknown> {
+	children: Children extends null ? null : Map<string, Children>;
+	addChild: (child: Children) => this;
+	parent: Parent | null;
+	setParent: (parent: Parent) => this;
 	query: (id: string) => IStructuredEntity | null;
 	id: string;
 }
@@ -16,7 +16,7 @@ export interface IStructureSerialized {
 }
 
 export interface IMainStructure
-	extends IStructuredEntity,
+	extends IStructuredEntity<null, ITree>,
 		ISerializableEntity<IStructureSerialized> {
 	getTotalPoints: () => number;
 	setTotalPoints: (points: number) => IMainStructure;

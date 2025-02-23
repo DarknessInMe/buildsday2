@@ -5,7 +5,7 @@ import { IModifier } from 'src/Root';
 import { ISkill } from 'src/Skill';
 import { ISubtree } from 'src/Subtree';
 
-export class MainStructure extends AbstractStructure implements IMainStructure {
+export class MainStructure extends AbstractStructure<null, ITree> implements IMainStructure {
 	public parent = null;
 	public children = new Map<string, ITree>();
 	public readonly id = '__ROOT__';
