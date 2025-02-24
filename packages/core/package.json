@@ -7,7 +7,6 @@
 	"scripts": {
 		"build": "tsc && tsc-alias",
 		"start": "node dist/index.js",
-		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
 		"test": "vitest"
 	},
 	"author": "DarknessInMe",
@@ -15,7 +14,6 @@
 	"devDependencies": {
 		"@types/node": "^22.5.4",
 		"concurrently": "^8.2.2",
-		"nodemon": "^3.1.4",
 		"tsc-alias": "^1.8.10",
 		"typescript": "^5.5.4",
 		"vitest": "^2.0.5"
