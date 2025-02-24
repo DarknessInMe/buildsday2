@@ -1,6 +1,6 @@
 import { expect, test, describe, beforeEach } from 'vitest';
 import { ISubtreeSerialized, Subtree } from './index';
-import { ISkill, Skill, SkillStatusEnum } from '../Skill';
+import { ISkill, Skill, SkillStatusEnum, SkillBuilder } from '../Skill';
 import { Modifier } from '../Root';
 import { ISubtree } from './interfaces';
 
@@ -8,8 +8,8 @@ let subtree: ISubtree;
 
 beforeEach(() => {
 	subtree = new Subtree('SUBTREE_ID', 'Subtree', 0, new Modifier())
-		.addChild(new Skill('SKILL_1', 'Skill 1', ['', ''], 1, [1, 2], [0, 0], new Modifier()))
-		.addChild(new Skill('SKILL_2', 'Skill 2', ['', ''], 1, [1, 2], [0, 0], new Modifier()));
+		.addChild(new SkillBuilder('SKILL_1', new Modifier()).setName('Skill 1').build())
+		.addChild(new SkillBuilder('SKILL_2', new Modifier()).setName('Skill 2').build());
 });
 
 describe('Testing meta methods for interaction with skills', () => {
@@ -44,7 +44,10 @@ describe('Testing skills purchasing', () => {
 		expect(subtree.getInvestedPoints()).toBe(0);
 	});
 	test('Should not be able to buy skill without required points to access', () => {
-		const skill = new Skill('SKILL_3', 'Skill 3', ['', ''], 1, [1, 2], [2, 3], new Modifier());
+		const skill = new SkillBuilder('SKILL_3', new Modifier())
+			.setPrice([1, 2])
+			.setUnlockPoints([2, 3])
+			.build();
 
 		subtree.addChild(skill);
 		subtree.buy(skill);
@@ -53,24 +56,14 @@ describe('Testing skills purchasing', () => {
 		expect(subtree.getInvestedPoints()).toBe(0);
 	});
 	test('Should be able to buy skill by acing already bought skill', () => {
-		const cheapSkill = new Skill(
-			'CHEAP_SKILL',
-			'Cheap',
-			['', ''],
-			1,
-			[1, 1],
-			[0, 0],
-			new Modifier(),
-		);
-		const expensiveSkill = new Skill(
-			'EXPENSIVE_SKILL',
-			'Expensive',
-			['', ''],
-			1,
-			[2, 2],
-			[2, 2],
-			new Modifier(),
-		);
+		const cheapSkill = new SkillBuilder('CHEAP_SKILL', new Modifier())
+			.setPrice([1, 1])
+			.setUnlockPoints([0, 0])
+			.build();
+		const expensiveSkill = new SkillBuilder('EXPENSIVE_SKILL', new Modifier())
+			.setPrice([2, 2])
+			.setUnlockPoints([2, 2])
+			.build();
 
 		subtree.addChild(cheapSkill).addChild(expensiveSkill);
 		subtree.buy(cheapSkill);
@@ -83,16 +76,14 @@ describe('Testing skills purchasing', () => {
 	});
 	test('Should be able to handle infamy bonus for skill purchases', () => {
 		const modifier = new Modifier();
-		const cheapSkill = new Skill('CHEAP_SKILL', 'Cheap', ['', ''], 1, [1, 1], [0, 0], modifier);
-		const expensiveSkill = new Skill(
-			'EXPENSIVE_SKILL',
-			'Expensive',
-			['', ''],
-			1,
-			[2, 2],
-			[2, 3],
-			modifier,
-		);
+		const cheapSkill = new SkillBuilder('CHEAP_SKILL', modifier)
+			.setPrice([1, 1])
+			.setUnlockPoints([0, 0])
+			.build();
+		const expensiveSkill = new SkillBuilder('EXPENSIVE_SKILL', modifier)
+			.setPrice([2, 2])
+			.setUnlockPoints([2, 3])
+			.build();
 
 		subtree.addChild(cheapSkill).addChild(expensiveSkill);
 

@@ -1,12 +1,12 @@
 import { expect, test, describe, beforeEach } from 'vitest';
-import { ISkill, Skill, SkillStatusEnum } from './index';
+import { ISkill, SkillStatusEnum, SkillBuilder } from './index';
 import { Modifier } from '../Root';
 
 describe('Testing Skill purchase methods', () => {
 	let skill: ISkill;
 
 	beforeEach(() => {
-		skill = new Skill('SKILL_ID', 'Skill', ['', ''], 1, [1, 2], [0, 0], new Modifier());
+		skill = new SkillBuilder('SKILL_ID', new Modifier()).setName('Skill').build();
 	});
 
 	test('Correct Skill buying behavior', () => {
