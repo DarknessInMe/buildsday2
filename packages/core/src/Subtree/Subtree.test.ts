@@ -7,9 +7,9 @@ import { ISubtree } from './interfaces';
 let subtree: ISubtree;
 
 beforeEach(() => {
-	subtree = new Subtree('SUBTREE_ID', 'Subtree', 0, new Modifier())
-		.addChild(new SkillBuilder('SKILL_1', new Modifier()).setName('Skill 1').build())
-		.addChild(new SkillBuilder('SKILL_2', new Modifier()).setName('Skill 2').build());
+	subtree = new Subtree('SUBTREE_ID', 'Subtree', new Modifier())
+		.addChild(new SkillBuilder('SKILL_1', new Modifier()).build())
+		.addChild(new SkillBuilder('SKILL_2', new Modifier()).build());
 });
 
 describe('Testing meta methods for interaction with skills', () => {

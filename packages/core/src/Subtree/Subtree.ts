@@ -5,13 +5,13 @@ import { ITree } from 'src/Tree';
 import { IModifier } from 'src/Root';
 
 export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtree {
+	private investedPoints: number = 0;
 	public children = new Map<string, ISkill>();
 	public parent: ITree | null = null;
 
 	constructor(
 		public readonly id: string,
 		public readonly name: string,
-		private investedPoints: number = 0,
 		protected modifier: IModifier,
 	) {
 		super();
