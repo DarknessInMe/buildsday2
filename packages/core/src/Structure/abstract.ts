@@ -8,19 +8,23 @@ export abstract class AbstractStructure<Parent, Children>
 	public abstract id: string;
 
 	public query(id: string): IStructuredEntity {
+		if (this.id === id) {
+			return this as IStructuredEntity;
+		}
+
 		if (!this.children) {
 			return null;
 		}
 
-		return (
-			([...this.children.values()] as IStructuredEntity[]).find((entity) => {
-				if (entity.id === id) {
-					return entity as IStructuredEntity;
-				}
+		for (const entity of [...this.children.values()] as IStructuredEntity[]) {
+			const foundEntity = entity.query(id);
 
-				return entity.query(id) as IStructuredEntity;
-			}) ?? null
-		);
+			if (foundEntity) {
+				return foundEntity;
+			}
+		}
+
+		return null;
 	}
 
 	public setParent(parent: Parent) {
@@ -31,7 +35,8 @@ export abstract class AbstractStructure<Parent, Children>
 
 	public addChild(child: Children) {
 		if (this.children) {
-			this.children.set((child as IStructuredEntity).id, child);
+			const typedChild = child as IStructuredEntity;
+			this.children.set(typedChild.id, typedChild.setParent(this) as Children);
 		}
 		return this;
 	}
