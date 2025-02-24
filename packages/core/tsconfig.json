@@ -9,7 +9,10 @@
 		"downlevelIteration": true,
 		"types": ["node", "vitest/globals"],
 		"skipLibCheck": true,
-		"strictFunctionTypes": true
+		"strictFunctionTypes": true,
+		"paths": {
+			"src/*": ["./src/*"]
+		}
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules"]

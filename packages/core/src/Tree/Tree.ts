@@ -1,4 +1,4 @@
-import { AbstractStructure, IMainStructure, IStructuredEntity } from 'src/Structure';
+import { AbstractStructure, IMainStructure } from 'src/Structure';
 import { ITree, ITreeSerialized } from './interfaces';
 import { ISubtree, ISubtreeSerialized } from 'src/Subtree';
 import { ISkill } from 'src/Skill';

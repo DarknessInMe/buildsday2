@@ -3,7 +3,7 @@ import { IStructuredEntity } from './interfaces';
 export abstract class AbstractStructure<Parent, Children>
 	implements IStructuredEntity<Parent, Children>
 {
-	public abstract parent: Parent;
+	public abstract parent: Parent | null;
 	public abstract children: Children extends null ? null : Map<string, Children>;
 	public abstract id: string;
 
