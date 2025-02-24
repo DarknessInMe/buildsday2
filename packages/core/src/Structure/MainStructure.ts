@@ -69,10 +69,17 @@ export class MainStructure extends AbstractStructure<null, ITree> implements IMa
 			return;
 		}
 
+		const price = skill.getPrice(skill.getHigherStatus());
+		const totalPoints = this.getTotalPoints() - price;
+
+		if (totalPoints < 0) {
+			return;
+		}
+
 		const isSuccess = tree.buy(skill);
 
 		if (isSuccess) {
-			this.setTotalPoints(this.getTotalPoints() - skill.getPrice(skill.getStatus()));
+			this.setTotalPoints(totalPoints);
 		}
 	}
 
