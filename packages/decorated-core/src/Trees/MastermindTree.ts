@@ -1,13 +1,13 @@
-import { BasicTree } from '@buildsday2/core';
+import { IModifier, Tree } from '@buildsday2/core';
 import { TREE_IDS_ENUM } from '../shared/enums';
 import { MedicSubtree, ControllerSubtree, SharpshooterSubtree } from '../Subtrees';
 
-export class MastermindTree extends BasicTree {
-    constructor() {
-        super(TREE_IDS_ENUM.MASTERMIND, 'Mastermind');
+export class MastermindTree extends Tree {
+	constructor(modifier: IModifier) {
+		super(TREE_IDS_ENUM.MASTERMIND, 'Mastermind', modifier);
 
-        this.addSubtree(new MedicSubtree());
-        this.addSubtree(new ControllerSubtree());
-        this.addSubtree(new SharpshooterSubtree());
-    }
+		this.addChild(new MedicSubtree(modifier));
+		this.addChild(new ControllerSubtree(modifier));
+		this.addChild(new SharpshooterSubtree(modifier));
+	}
 }
