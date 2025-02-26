@@ -1,6 +1,6 @@
 import { ITree } from 'src/Tree';
 import { IModifier } from './interfaces';
-import { IMainStructure, IStructureSerialized } from 'src/Structure';
+import { IMainStructure, IStructuredEntity, IStructureSerialized } from 'src/Structure';
 
 export class Root {
 	constructor(protected structure: IMainStructure, protected modifier: IModifier) {}
@@ -13,6 +13,10 @@ export class Root {
 
 	public getTrees() {
 		return this.structure.children;
+	}
+
+	public query(entityId: string): IStructuredEntity {
+		return this.structure.query(entityId);
 	}
 
 	public serialize() {

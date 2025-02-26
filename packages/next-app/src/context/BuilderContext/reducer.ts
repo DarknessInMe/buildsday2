@@ -1,24 +1,25 @@
-import { IBuilderState, BuilderAction, BuilderActionTypeEnum } from "./typing";
+import { TREE_IDS_ENUM } from '@buildsday2/decorated-core';
+import { IBuilderState, BuilderAction, BuilderActionTypeEnum } from './typing';
 
 export const INITIAL_STATE: IBuilderState = {
-   currentTree: null!,
-   totalPoints: 0,
-   selectedSkillId: '',
+	currentTreeId: TREE_IDS_ENUM.MASTERMIND,
+	totalPoints: 0,
+	selectedSkillId: '',
 };
 
 export const reducer = (state: IBuilderState, action: BuilderAction): IBuilderState => {
-   switch(action.type) {
-      case BuilderActionTypeEnum.SET_CURRENT_TREE: {
-         return { ...state, currentTree: action.payload };
-      }
-      case BuilderActionTypeEnum.SET_TOTAL_POINTS: {
-         return { ...state, totalPoints: action.payload };
-      }
-      case BuilderActionTypeEnum.SELECT_SKILL: {
-         return { ...state, selectedSkillId: action.payload };
-      }
-      default: {
-         return state;
-      }
-   }
-}
+	switch (action.type) {
+		case BuilderActionTypeEnum.SET_CURRENT_TREE: {
+			return { ...state, currentTreeId: action.payload };
+		}
+		case BuilderActionTypeEnum.SET_TOTAL_POINTS: {
+			return { ...state, totalPoints: action.payload };
+		}
+		case BuilderActionTypeEnum.SELECT_SKILL: {
+			return { ...state, selectedSkillId: action.payload };
+		}
+		default: {
+			return state;
+		}
+	}
+};
