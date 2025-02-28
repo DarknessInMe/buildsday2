@@ -1,3 +1,4 @@
+import { BuilderType } from '@/shared/interfaces';
 import { SkillDescriptionType, SkillStatusEnum } from '@buildsday2/core';
 import { SKILL_IDS_ENUM, SUBTREE_IDS_ENUM, TREE_IDS_ENUM } from '@buildsday2/decorated-core';
 
@@ -37,3 +38,5 @@ export type BuilderAction =
 	| { type: BuilderActionTypeEnum.SET_CURRENT_TREE; payload: TREE_IDS_ENUM }
 	| { type: BuilderActionTypeEnum.SET_TOTAL_POINTS; payload: number }
 	| { type: BuilderActionTypeEnum.SELECT_SKILL; payload: string };
+
+export type SubscriberType = (payload: BuilderType) => void;

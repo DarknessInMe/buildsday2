@@ -7,17 +7,15 @@ import {
 	useRef,
 	useCallback,
 	useReducer,
-	useMemo,
+	useEffect,
+	useState,
 } from 'react';
 import { ReactNode } from 'react';
-import {
-	TREE_IDS_ENUM,
-	RootFactory,
-	SUBTREE_IDS_ENUM,
-	SKILL_IDS_ENUM,
-} from '@buildsday2/decorated-core';
+import { TREE_IDS_ENUM, RootFactory } from '@buildsday2/decorated-core';
 import { INITIAL_STATE, reducer } from './reducer';
 import { BuilderActionTypeEnum, IBuilderState, ITreeState } from './typing';
+import { PubSub } from './PubSub';
+import { buildTreeState } from './utils';
 
 interface IBuilderProviderProps {
 	children: ReactNode;
@@ -37,31 +35,41 @@ const BuilderContext = createContext<IBuilderContextData>(null!);
 
 export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
 	const rootRef = useRef(new RootFactory().getRoot());
+	const pubSubRef = useRef(new PubSub(rootRef.current));
+	const stateRef = useRef(INITIAL_STATE);
 
 	const [state, dispatch] = useReducer(reducer, INITIAL_STATE, (): typeof INITIAL_STATE => ({
 		currentTreeId: TREE_IDS_ENUM.MASTERMIND,
 		totalPoints: rootRef.current.getPoints(),
 		selectedSkillId: '',
 	}));
-	const currentTree: ITreeState = useMemo(() => {
-		const treeEntity = rootRef.current.getTrees().get(state.currentTreeId)!;
+	stateRef.current = state;
 
-		return {
-			id: treeEntity.id as TREE_IDS_ENUM,
-			name: treeEntity.name,
-			subtrees: [...treeEntity.children.values()].map((subtree) => ({
-				id: subtree.id as SUBTREE_IDS_ENUM,
-				name: subtree.name,
-				points: subtree.getInvestedPoints(),
-				skills: [...subtree.children.values()].map((skill) => ({
-					id: skill.id as SKILL_IDS_ENUM,
-					name: skill.name,
-					description: skill.description,
-					price: skill.getPrice(skill.getHigherStatus()),
-					status: skill.getStatus(),
-				})),
-			})),
+	const [currentTree, setCurrentTree] = useState<ITreeState>(() =>
+		buildTreeState(rootRef.current, state.currentTreeId),
+	);
+
+	useEffect(() => {
+		const unsubscribe = pubSubRef.current.subscribe((root) => {
+			setCurrentTree(buildTreeState(root, stateRef.current.currentTreeId));
+
+			const points = root.getPoints();
+
+			if (points !== stateRef.current.totalPoints) {
+				dispatch({
+					type: BuilderActionTypeEnum.SET_TOTAL_POINTS,
+					payload: points,
+				});
+			}
+		});
+
+		return () => {
+			unsubscribe();
 		};
+	}, []);
+
+	useEffect(() => {
+		pubSubRef.current.notify();
 	}, [state.currentTreeId]);
 
 	const changeCurrentTree = useCallback((treeId: TREE_IDS_ENUM) => {
@@ -80,10 +88,12 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
 
 	const buySkill = useCallback((skillId: string) => {
 		rootRef.current.buySkill(skillId);
+		pubSubRef.current.notify();
 	}, []);
 
 	const removeSkill = useCallback((skillId: string) => {
 		rootRef.current.removeSkill(skillId);
+		pubSubRef.current.notify();
 	}, []);
 
 	return (

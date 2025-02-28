@@ -80,12 +80,30 @@ export class Skill extends AbstractStructure<ISubtree, null> implements ISkill {
 		return this.modifier.getUnlockPoints(this.unlockPoints);
 	}
 
-	public getPrice(status: SkillStatusEnum | null) {
-		if (!status) {
-			return null;
+	public getPrice(status?: SkillStatusEnum | null) {
+		let statusSrc = typeof status === 'undefined' ? this.getStatus() : status;
+
+		if (statusSrc === null) {
+			return 0;
 		}
 
-		return status === SkillStatusEnum.BASIC ? this.price[0] : this.price[1];
+		return statusSrc === SkillStatusEnum.BASIC ? this.price[0] : this.price[1];
+	}
+
+	public getInvestedPoints() {
+		const status = this.getStatus();
+
+		switch (status) {
+			case SkillStatusEnum.BASIC: {
+				return this.price[0];
+			}
+			case SkillStatusEnum.ACED: {
+				return this.price[0] + this.price[1];
+			}
+			default: {
+				return 0;
+			}
+		}
 	}
 
 	public buy() {

@@ -72,12 +72,18 @@ export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtre
 
 		const price = skill.getPrice(skill.getStatus());
 		const newInvestedPoints = this.getInvestedPoints() - price;
-		const satisfiesSubtree = Array.from(this.children.values()).every((singlingSkill) => {
-			if (skill.tier >= singlingSkill.tier) {
+		const satisfiesSubtree = Array.from(this.children.values()).every((siblingSkill) => {
+			if (siblingSkill.getStatus() === null) {
 				return true;
 			}
 
-			return singlingSkill.getUnlockPoints() <= newInvestedPoints;
+			if (skill.tier >= siblingSkill.tier) {
+				return true;
+			}
+
+			return (
+				siblingSkill.getUnlockPoints() <= newInvestedPoints - siblingSkill.getInvestedPoints()
+			);
 		});
 
 		if (!satisfiesSubtree) {
