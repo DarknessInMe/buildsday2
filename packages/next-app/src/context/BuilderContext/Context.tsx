@@ -28,6 +28,7 @@ export interface IBuilderContextData {
 	selectSkillById: (skillId: string) => void;
 	buySkill: (skillId: string) => void;
 	removeSkill: (skillId: string) => void;
+	toggleInfamyBonus: () => void;
 	builderState: IBuilderState;
 }
 
@@ -42,6 +43,7 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
 		currentTreeId: TREE_IDS_ENUM.MASTERMIND,
 		totalPoints: rootRef.current.getPoints(),
 		selectedSkillId: '',
+		isInfamyBonus: rootRef.current.getDiscountStatus(),
 	}));
 	stateRef.current = state;
 
@@ -54,11 +56,19 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
 			setCurrentTree(buildTreeState(root, stateRef.current.currentTreeId));
 
 			const points = root.getPoints();
+			const infamyBonus = root.getDiscountStatus();
 
 			if (points !== stateRef.current.totalPoints) {
 				dispatch({
 					type: BuilderActionTypeEnum.SET_TOTAL_POINTS,
 					payload: points,
+				});
+			}
+
+			if (infamyBonus !== stateRef.current.isInfamyBonus) {
+				dispatch({
+					type: BuilderActionTypeEnum.SET_INFAMY_BONUS,
+					payload: infamyBonus,
 				});
 			}
 		});
@@ -96,6 +106,11 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
 		pubSubRef.current.notify();
 	}, []);
 
+	const toggleInfamyBonus = useCallback(() => {
+		rootRef.current.toggleDiscountStatus();
+		pubSubRef.current.notify();
+	}, []);
+
 	return (
 		<BuilderContext.Provider
 			value={{
@@ -105,6 +120,7 @@ export const BuilderProvider: FC<IBuilderProviderProps> = ({ children }) => {
 				buySkill,
 				removeSkill,
 				selectSkillById,
+				toggleInfamyBonus,
 				builderState: state,
 			}}>
 			{children}

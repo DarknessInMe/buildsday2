@@ -5,6 +5,7 @@ export const INITIAL_STATE: IBuilderState = {
 	currentTreeId: TREE_IDS_ENUM.MASTERMIND,
 	totalPoints: 0,
 	selectedSkillId: '',
+	isInfamyBonus: false,
 };
 
 export const reducer = (state: IBuilderState, action: BuilderAction): IBuilderState => {
@@ -17,6 +18,9 @@ export const reducer = (state: IBuilderState, action: BuilderAction): IBuilderSt
 		}
 		case BuilderActionTypeEnum.SELECT_SKILL: {
 			return { ...state, selectedSkillId: action.payload };
+		}
+		case BuilderActionTypeEnum.SET_INFAMY_BONUS: {
+			return { ...state, isInfamyBonus: action.payload };
 		}
 		default: {
 			return state;

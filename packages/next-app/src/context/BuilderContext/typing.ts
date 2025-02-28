@@ -6,6 +6,7 @@ export interface IBuilderState {
 	currentTreeId: TREE_IDS_ENUM;
 	totalPoints: number;
 	selectedSkillId: string;
+	isInfamyBonus: boolean;
 }
 
 export interface ISkillState {
@@ -32,11 +33,13 @@ export enum BuilderActionTypeEnum {
 	SET_CURRENT_TREE = 'SET_CURRENT_TREE',
 	SET_TOTAL_POINTS = 'SET_TOTAL_POINTS',
 	SELECT_SKILL = 'SELECT_SKILL',
+	SET_INFAMY_BONUS = 'SET_INFAMY_BONUS',
 }
 
 export type BuilderAction =
 	| { type: BuilderActionTypeEnum.SET_CURRENT_TREE; payload: TREE_IDS_ENUM }
 	| { type: BuilderActionTypeEnum.SET_TOTAL_POINTS; payload: number }
-	| { type: BuilderActionTypeEnum.SELECT_SKILL; payload: string };
+	| { type: BuilderActionTypeEnum.SELECT_SKILL; payload: string }
+	| { type: BuilderActionTypeEnum.SET_INFAMY_BONUS; payload: boolean };
 
 export type SubscriberType = (payload: BuilderType) => void;
