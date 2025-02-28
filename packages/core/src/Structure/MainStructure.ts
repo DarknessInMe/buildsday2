@@ -90,10 +90,11 @@ export class MainStructure extends AbstractStructure<null, ITree> implements IMa
 			return;
 		}
 
+		const price = skill.getPrice();
 		const isSuccess = tree.remove(skill);
 
 		if (isSuccess) {
-			this.setTotalPoints(this.getTotalPoints() + skill.getPrice(skill.getStatus()));
+			this.setTotalPoints(this.getTotalPoints() + price);
 		}
 	}
 }
