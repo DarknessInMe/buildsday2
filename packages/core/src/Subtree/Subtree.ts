@@ -65,26 +65,37 @@ export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtre
 		return isSuccess;
 	}
 
+	protected checkSubtreeCompleteness(removedSkill: ISkill) {
+		let virtualPoints: number = 0;
+
+		return Array.from(this.children.values())
+			.sort((a, b) => a.tier - b.tier)
+			.every((treeSkill) => {
+				if (removedSkill.id === treeSkill.id) {
+					virtualPoints += treeSkill.getPrice(treeSkill.getLowerStatus());
+					return true;
+				}
+
+				if (treeSkill.getStatus() === null) {
+					return true;
+				}
+
+				if (treeSkill.getUnlockPoints() <= virtualPoints) {
+					virtualPoints += treeSkill.getInvestedPoints();
+					return true;
+				} else {
+					return false;
+				}
+			});
+	}
+
 	public remove(skill: ISkill) {
 		if (!this.children.has(skill.id)) {
 			return false;
 		}
 
 		const price = skill.getPrice(skill.getStatus());
-		const newInvestedPoints = this.getInvestedPoints() - price;
-		const satisfiesSubtree = Array.from(this.children.values()).every((siblingSkill) => {
-			if (siblingSkill.getStatus() === null) {
-				return true;
-			}
-
-			if (skill.tier >= siblingSkill.tier) {
-				return true;
-			}
-
-			return (
-				siblingSkill.getUnlockPoints() <= newInvestedPoints - siblingSkill.getInvestedPoints()
-			);
-		});
+		const satisfiesSubtree = this.checkSubtreeCompleteness(skill);
 
 		if (!satisfiesSubtree) {
 			return false;
@@ -93,7 +104,7 @@ export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtre
 		const isSuccess = skill.remove();
 
 		if (isSuccess) {
-			this.setInvestedPoints(newInvestedPoints);
+			this.setInvestedPoints(this.getInvestedPoints() - price);
 		}
 
 		return isSuccess;
