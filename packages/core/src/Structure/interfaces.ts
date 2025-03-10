@@ -7,6 +7,7 @@ export interface IStructuredEntity<Parent = unknown, Children = unknown> {
 	parent: Parent | null;
 	setParent: (parent: Parent) => this;
 	query: (id: string) => IStructuredEntity | null;
+	cleanUp: () => void;
 	id: string;
 }
 

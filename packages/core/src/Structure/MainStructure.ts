@@ -8,10 +8,19 @@ import { ISubtree } from 'src/Subtree';
 export class MainStructure extends AbstractStructure<null, ITree> implements IMainStructure {
 	public parent = null;
 	public children = new Map<string, ITree>();
+	private initialPoints: number;
 	public readonly id = '__ROOT__';
 
 	constructor(private totalPoints: number, protected modifier: IModifier) {
 		super();
+		this.initialPoints = totalPoints;
+	}
+
+	public cleanUp(): void {
+		this.totalPoints = this.initialPoints;
+		this.children.forEach((tree) => {
+			tree.cleanUp();
+		});
 	}
 
 	public serialize() {

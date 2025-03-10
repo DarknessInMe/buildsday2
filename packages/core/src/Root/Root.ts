@@ -15,6 +15,10 @@ export class Root {
 		return this.structure.children;
 	}
 
+	public cleanUp() {
+		return this.structure.cleanUp();
+	}
+
 	public query(entityId: string): IStructuredEntity {
 		return this.structure.query(entityId);
 	}
@@ -32,7 +36,12 @@ export class Root {
 	}
 
 	public toggleDiscountStatus() {
-		return this.modifier.setDiscountStatus(!this.modifier.getDiscountStatus());
+		const prevStatus = this.modifier.getDiscountStatus();
+
+		if (prevStatus) {
+			this.cleanUp();
+		}
+		return this.modifier.setDiscountStatus(!prevStatus);
 	}
 
 	public getDiscountStatus() {

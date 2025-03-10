@@ -7,6 +7,8 @@ export abstract class AbstractStructure<Parent, Children>
 	public abstract children: Children extends null ? null : Map<string, Children>;
 	public abstract id: string;
 
+	public abstract cleanUp(): void;
+
 	public query(id: string): IStructuredEntity {
 		if (this.id === id) {
 			return this as IStructuredEntity;

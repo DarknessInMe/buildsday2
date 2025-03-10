@@ -27,6 +27,10 @@ export class Skill extends AbstractStructure<ISubtree, null> implements ISkill {
 		super();
 	}
 
+	public cleanUp(): void {
+		this.setStatus(null);
+	}
+
 	public serialize() {
 		return {
 			id: this.id,

@@ -16,6 +16,12 @@ export class Tree extends AbstractStructure<IMainStructure, ISubtree> implements
 		super();
 	}
 
+	public cleanUp(): void {
+		this.children.forEach((subtree) => {
+			subtree.cleanUp();
+		});
+	}
+
 	public serialize() {
 		return {
 			id: this.id,

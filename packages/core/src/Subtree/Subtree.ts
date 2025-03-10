@@ -17,6 +17,13 @@ export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtre
 		super();
 	}
 
+	public cleanUp(): void {
+		this.setInvestedPoints(0);
+		this.children.forEach((skill) => {
+			skill.cleanUp();
+		});
+	}
+
 	public serialize() {
 		return {
 			id: this.id,
