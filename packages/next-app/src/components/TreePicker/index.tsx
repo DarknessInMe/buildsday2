@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 import { useBuilderContext } from '@/context/BuilderContext';
-import clsx from 'clsx';
 import { TREE_IDS_ENUM } from '@buildsday2/decorated-core';
+import { TabBar, TabButton } from '@/components/Tabs';
 
 export const TreePicker = () => {
 	const { rootRef, changeCurrentTree, builderState } = useBuilderContext();
@@ -16,20 +16,15 @@ export const TreePicker = () => {
 	}, []);
 
 	return (
-		<div className="flex border-0 border-b-2 border-b-white ">
+		<TabBar>
 			{treePicker.map(({ id, name }) => (
-				<button
+				<TabButton
 					key={id}
 					onClick={() => changeCurrentTree(id)}
-					className={clsx(
-						'text-xl p-2',
-						builderState.currentTreeId === id
-							? 'bg-white text-black'
-							: 'bg-transparent text-white',
-					)}>
+					isActive={builderState.currentTreeId === id}>
 					{name}
-				</button>
+				</TabButton>
 			))}
-		</div>
+		</TabBar>
 	);
 };
