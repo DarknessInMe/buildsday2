@@ -23,7 +23,7 @@ export const Tree = () => {
 					/>
 				))}
 			</div>
-			<div className="w-1/3 p-2">
+			<div className="w-1/3 pl-2">
 				<TreeSidebar />
 			</div>
 		</div>
