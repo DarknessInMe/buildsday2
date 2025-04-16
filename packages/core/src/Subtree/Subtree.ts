@@ -59,7 +59,7 @@ export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtre
 	}
 
 	public buy(skill: ISkill) {
-		if (!this.children.has(skill.id) || skill.getUnlockPoints() > this.investedPoints) {
+		if (!this.children.has(skill.id) || !skill.isAvailable(this.investedPoints)) {
 			return false;
 		}
 
@@ -72,27 +72,41 @@ export class Subtree extends AbstractStructure<ITree, ISkill> implements ISubtre
 		return isSuccess;
 	}
 
+	/**
+	 * This algorithm checks tree completeness in case of skill removing.
+	 *
+	 * 1. Sort skills in tree from lower to higher. It is necessary as we have to calculate wasted points
+	 *    (here, virtual points) to make sure higher level skills are available
+	 * 2. Collect wasted points from bought and still AVAILABLE skills (keep in mind, we have to check target
+	 *    skill with downgraded variant)
+	 *
+	 * If each skill satisfies algorithm, it means everything is ok and target skill can be safely removed.
+	 * This algorithm involves multiple mapping over whole array of skills via sort() and every methods(),
+	 * as there is no any links or connections between skills (in default implementations it is redundant), but in more
+	 * complex scenarios it can require re-thinking of approach. Use inheritance and polymorphism over checkSubtreeCompleteness()
+	 * method for safe re-working
+	 */
 	protected checkSubtreeCompleteness(removedSkill: ISkill) {
 		let virtualPoints: number = 0;
 
 		return Array.from(this.children.values())
-			.sort((a, b) => a.tier - b.tier)
+			.sort((a, b) => a.tier - b.tier) // 1.
 			.every((treeSkill) => {
-				if (removedSkill.id === treeSkill.id) {
-					virtualPoints += treeSkill.getPrice(treeSkill.getLowerStatus());
-					return true;
-				}
-
 				if (treeSkill.getStatus() === null) {
 					return true;
 				}
 
-				if (treeSkill.getUnlockPoints() <= virtualPoints) {
-					virtualPoints += treeSkill.getInvestedPoints();
+				if (removedSkill.id === treeSkill.id) {
+					virtualPoints += treeSkill.getPrice(treeSkill.getLowerStatus()); // 2.
 					return true;
-				} else {
-					return false;
 				}
+
+				if (treeSkill.isAvailable(virtualPoints)) {
+					virtualPoints += treeSkill.getInvestedPoints(); // 2.
+					return true;
+				}
+
+				return false;
 			});
 	}
 

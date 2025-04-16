@@ -24,6 +24,7 @@ export interface ISkill
 	buy: () => boolean;
 	remove: () => boolean;
 	getInvestedPoints: () => number;
+	isAvailable: (investedPoints: number) => boolean;
 }
 
 /**
